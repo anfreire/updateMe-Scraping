@@ -1,4 +1,4 @@
-from scrappers.Selenium import Selenium, By
+from lib.selenium import Selenium, By, WebDriverWait, EC
 from selenium.common.exceptions import NoSuchElementException
 
 class ApkDone(Selenium):
@@ -6,8 +6,8 @@ class ApkDone(Selenium):
 		self.link = f"https://apkdone.com/{tag}/download"
 		super().__init__()
 
-	def getLink(self) -> str:
-		self.openLink(self.link)
+	def fun(self) -> str:
+		self.get(self.link)
 
 		def condition(driver):
 			try:
@@ -15,4 +15,7 @@ class ApkDone(Selenium):
 			except NoSuchElementException:
 				return False
 
-		return self.waitCustom(condition).get_attribute("href")
+		wait = WebDriverWait(self, 10)
+		el = wait.until(condition)
+		href = el.get_attribute("href")
+		return self.downloadFile(href)

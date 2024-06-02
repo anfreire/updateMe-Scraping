@@ -1,4 +1,4 @@
-from scrappers.Selenium import Selenium
+from lib.selenium import Selenium, WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import (
     NoSuchElementException,
@@ -17,7 +17,7 @@ class Base(Selenium):
         self.link = link
 
     def getLink(self) -> str:
-        self.openLink(self.link)
+        self.get(self.link)
 
         def condition(driver):
             try:
@@ -26,10 +26,14 @@ class Base(Selenium):
                 return False
 
         try:
-            element = self.waitCustom(condition, 12).get_attribute("href")
+            wait = WebDriverWait(self, 10)
+            element = wait.until(condition)
+            element = element.get_attribute("href")
         except UnexpectedAlertPresentException:
             sleep(1)
-            element = self.waitCustom(condition, 12).get_attribute("href")
+            wait = WebDriverWait(self, 15)
+            element = wait.until(condition)
+            element = element.get_attribute("href")
         return element
 
 
@@ -37,16 +41,6 @@ class Modyolo(Base):
     def __init__(self, tag: str):
         super().__init__(f"https://modyolo.com/download/{tag}/1")
         self.tag = tag
-
-    def getLink_alt(self) -> str:
-        os.system(
-            f"flatpak run com.google.Chrome https://modyolo.com/download/{self.tag}/1 --start-maximized 2> /dev/null > /dev/null &"
-        )
-        sleep(10)
-        # pyautogui.rightClick(917, 507)
-        sleep(1)
-        # pyautogui.click(1034, 672)
-        return subprocess.check_output(["xclip", "-o"]).decode()
 
     @property
     def origin(self) -> str:

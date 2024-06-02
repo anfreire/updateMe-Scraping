@@ -1,7 +1,7 @@
-from tools.AppBase import AppBase
-from tools.Index import Index
+from utils.Index import Index
+from utils.AppBase import AppBase
+from lib.selenium import Selenium, By
 from providers.Github import Github
-from scrappers.Selenium import Selenium, By
 from providers.Modyolo import Modyolo, Liteapks, Moddroid
 from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
@@ -12,13 +12,14 @@ import re
 
 #####################################################################################
 # HDO
-def hdo(index: Index):
+def hdo():
 	# HDO
 	def HDO():
-		return "https://hdo.app/download"
+		driver = Selenium()
+		return driver.downloadFile("https://hdo.app/download")
 
 	app = AppBase("HDO", {"HDO": HDO})
-	app.update(index)
+	app.update()
 
 
 #####################################################################################

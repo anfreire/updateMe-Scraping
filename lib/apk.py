@@ -22,13 +22,13 @@ class Apk:
         return self._sha256
 
     @version.setter
-    def version(self, value):
+    def version(self, _):
         raise AttributeError("Version is read-only")
 
     @packageName.setter
-    def packageName(self, value):
+    def packageName(self, _):
         raise AttributeError("packageName is read-only")
 
     @sha256.setter
-    def sha256(self, value):
+    def sha256(self, _):
         raise AttributeError("sha256 is read-only")

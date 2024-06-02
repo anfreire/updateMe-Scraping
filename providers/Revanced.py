@@ -1,4 +1,4 @@
-from scrappers.Selenium import Selenium, By
+from lib.selenium import Selenium, By
 from providers.Github import Github
 from typing import List
 import re
@@ -11,8 +11,8 @@ class Revanced(Selenium):
         super().__init__()
 
     def getLink(self) -> str:
-        self.openLink(self.link)
-        tbodies = self.getElements(By.TAG_NAME, "tbody")
+        self.get(self.link)
+        tbodies = self.find_elements(By.TAG_NAME, "tbody")
         for tbodie in tbodies:
             row = tbodie.find_element(By.TAG_NAME, "tr")
             link = None

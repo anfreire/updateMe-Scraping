@@ -1,12 +1,9 @@
 import vt
-import json
 from dataclasses import dataclass
-from tools.Index import Index
+from GLOBAL import GLOBAL
 from typing import List
 import time
-from base.abstract.singleton import SingletonMetaclass
-from constants import PATHS
-from lib.github import Github
+from typing import Generator
 
 
 @dataclass
@@ -20,87 +17,102 @@ class Analysis:
     finished: bool
 
 
-class VirusTotal(metaclass=SingletonMetaclass):
+class VirusTotal:
+    istance = None
+    client = None
+    queue = List[Analysis]
+    requests_made = 0
+    last_minute = None
 
-    def __init__(self) -> None:
-        api_key = json.load(open(PATHS.VT_KEY))["key"]
-        self.client = vt.Client(api_key)
-        self.queue: List[Analysis] = []
-        self.requests_made = 0
-        self.last_minute = None
+    def __new__(cls):
+        if not cls.istance:
+            cls.istance = super(VirusTotal, cls).__new__(cls)
+            cls.client = vt.Client(GLOBAL.Config["VirusTotal"]["API_KEY"])
+            cls.queue: List[Analysis] = []
+            cls.requests_made = 0
+            cls.last_minute = None
+        return cls.istance
 
-    def __del__(self) -> None:
-        self.client.close()
+    def __del__(cls) -> None:
+        cls.client.close()
 
-    def _add(self, path: str) -> vt.Object:
+    @classmethod
+    def _add(cls, path: str) -> vt.Object:
         with open(path, "rb") as file:
-            return self.client.scan_file(file)
+            return cls.client.scan_file(file)
 
-    def can_make_request(self) -> bool:
-        if self.last_minute is None or time.time() - self.last_minute > 60:
+    @classmethod
+    def can_make_request(cls) -> bool:
+        if cls.last_minute is None or time.time() - cls.last_minute > 60:
             return True
-        return self.requests_made < 4
+        return cls.requests_made < 4
 
-    def register_request(self) -> None:
-        if self.last_minute is None or time.time() - self.last_minute > 60:
-            self.last_minute = time.time()
-            self.requests_made = 1
+    @classmethod
+    def register_request(cls) -> None:
+        if cls.last_minute is None or time.time() - cls.last_minute > 60:
+            cls.last_minute = time.time()
+            cls.requests_made = 1
         else:
-            self.requests_made += 1
+            cls.requests_made += 1
 
-    def wait_requests_available(self) -> None:
+    @classmethod
+    def wait_requests_available(cls) -> None:
         printed = False
-        while not self.can_make_request():
+        while not cls.can_make_request():
             if not printed:
-                print("Waiting for VirusTotal requests to be available")
+                GLOBAL.Log(
+                    "VirusTotal rate limit reached, waiting for requests to be available",
+                    level="INFO",
+                )
                 printed = True
             time.sleep(1)
 
-    def add(self, appname: str, provider: str, path: str, sha256: str) -> None:
-        self.wait_requests_available()
-        self.register_request()
-        analysis = self._add(path)
-        self.queue.append(
+    @classmethod
+    def add(cls, appname: str, provider: str, path: str, sha256: str) -> None:
+        cls.wait_requests_available()
+        cls.register_request()
+        analysis = cls._add(path)
+        cls.queue.append(
             Analysis(analysis, appname, provider, sha256, path, False, False)
         )
+        GLOBAL.Log(f"Added {appname} - {provider} to VirusTotal queue", level="INFO")
 
-    def update_analysis(self, data: Analysis) -> None:
-        self.wait_requests_available()
-        self.register_request()
-        data.analysis = self.client.get_object("/analyses/{}", data.analysis.id)
+    @classmethod
+    def update_analysis(cls, data: Analysis) -> None:
+        cls.wait_requests_available()
+        cls.register_request()
+        data.analysis = cls.client.get_object("/analyses/{}", data.analysis.id)
 
-    def is_finished(self, data: Analysis) -> bool:
+    @classmethod
+    def is_finished(cls, data: Analysis) -> bool:
         return data.analysis.status == "completed"
 
-    def has_virus(self, data: Analysis) -> bool:
+    @classmethod
+    def has_virus(cls, data: Analysis) -> bool:
         return any(
             [data.analysis.stats["malicious"], data.analysis.stats["suspicious"]]
         )
 
-    def wait_queue(self) -> None:
+    @classmethod
+    def wait_queue(cls) -> Generator[Analysis, None, None]:
         done = []
-        while len(done) != len(self.queue) and len(self.queue) > 0:
-            for data in self.queue:
+        while len(cls.queue) and len(done) != len(cls.queue):
+            for data in cls.queue:
                 if data in done:
                     continue
-                self.update_analysis(data)
-                if not self.is_finished(data):
+                cls.update_analysis(data)
+                if not cls.is_finished(data):
                     continue
                 done.append(data)
                 data.finished = True
-                if self.has_virus(data):
+                if cls.has_virus(data):
                     data.infected = True
-                    print(f"{data.appname} - {data.provider} is infected")
+                    yield data
+                    GLOBAL.Log(
+                        f"{data.appname} - {data.provider} is infected", level="WARNING"
+                    )
                 else:
-                    print(f"{data.appname} - {data.provider} is clean")
-
-    def update_index(self, index: Index) -> None:
-        for data in self.queue:
-            index.update_app_safety(data.appname, data.provider, not data.infected)
-        index.write()
-        Github.push_index("Updated VirusTotal results")
-
-    def get_uploaded_file(self, sha256) -> vt.Object:
-        self.wait_requests_available()
-        self.register_request()
-        return self.client.get_object(f"/files/{sha256}")
+                    yield data
+                    GLOBAL.Log(
+                        f"{data.appname} - {data.provider} is safe", level="INFO"
+                    )

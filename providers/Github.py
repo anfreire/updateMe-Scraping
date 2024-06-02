@@ -1,9 +1,9 @@
-from scrappers.UrlLib import UrlLib
 from typing import List
 import re
+from lib.selenium import Selenium, By, WebDriverWait, EC
 
 
-class Github(UrlLib):
+class Github(Selenium):
     def __init__(self, user: str, repo: str):
         self.user = user
         self.repo = repo
@@ -13,13 +13,13 @@ class Github(UrlLib):
         return f"https://github.com/{self.user}/{self.repo}"
 
     def getVersions(self) -> List[str]:
-        self.getPage(f"{self.prefix}/releases")
-        divs = self.getTags("div")
+        self.get(f"{self.prefix}/releases")
+        divs = self.find_elements(by=By.TAG_NAME, value="div")
         versions = list()
         for div in divs:
-            if div.find("svg", attrs={"aria-label": "Tag"}) and div.find("span"):
+            if div.find_element(By.XPATH, ".//svg[@aria-label='Tag']") and div.find_element(By.TAG_NAME, "span"):
                 try:
-                    text = div.find("span").text
+                    text = div.find_element(By.TAG_NAME, "span").text
                     text = re.sub(r"\s+", "", text)
                     if (
                         text == self.user
@@ -41,13 +41,13 @@ class Github(UrlLib):
     def getLinks(
         self, version: str, include: List[str] = [], exclude: List[str] = []
     ) -> List[str]:
-        self.getPage(f"{self.prefix}/releases/expanded_assets/{version}")
-        lis = self.getTags("li")
+        self.get(f"{self.prefix}/releases/expanded_assets/{version}")
+        lis = self.find_elements(By.TAG_NAME, "li")
         links = []
         for li in lis:
-            div = li.find("div")
-            if div and div.find("svg") and div.find("a"):
-                href = div.find("a").get("href")
+            div = li.find_element(By.TAG_NAME, "div")
+            if div.find_element(By.XPATH, ".//svg") and div.find_element(By.TAG_NAME, "a"):
+                href = div.find_element(By.TAG_NAME, "a").get_attribute("href")
                 if (
                     href
                     and len(href) != 0

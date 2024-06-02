@@ -1,0 +1,4 @@
+pyaxmlparser
+webdriver_manager
+selenium
+vt-py
