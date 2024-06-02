@@ -65,7 +65,6 @@ class AppBase:
 				f"{self.app_title} - {provider_title} has different package name. Expected: {oldProvider['packageName']}, got: {apk.packageName}",
 				level="CRITICAL",
 			)
-			return
 		forced = False
 		if GLOBAL.Args.virustotal:
 			VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
@@ -87,6 +86,7 @@ class AppBase:
 		if not GLOBAL.Args.github:
 			download = Github.push_release(path)
 
+		Index.index[self.app_title]["providers"][provider_title]["packageName"] = apk.packageName
 		Index.index[self.app_title]["providers"][provider_title]["download"] = download
 		Index.index[self.app_title]["providers"][provider_title]["version"] = apk.version
 		Index.index[self.app_title]["providers"][provider_title]["sha256"] = apk.sha256

@@ -9,7 +9,6 @@ class Base(Selenium):
 
 	def __call__(self) -> str | None:
 		link = self.getLink()
-		print(link)
 		return self.downloadFile(link) if link else None
 
 	def getLink(self, el: bool = False) -> str:

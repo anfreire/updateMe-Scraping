@@ -1,12 +1,12 @@
-from selenium.webdriver import ChromeOptions, ChromeService
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from GLOBAL import GLOBAL
 import os
-from webdriver_manager.chrome import ChromeDriverManager
 from typing import List
 import time
 os.environ['WDM_LOG'] = '0'
@@ -17,7 +17,7 @@ class Selenium(WebDriver):
     def __init__(self) -> None:
         self.cleanOldSession()
         super().__init__(
-            service=ChromeService(ChromeDriverManager().install()),
+            service=Service(executable_path='/usr/bin/chromedriver'), # '/usr/bin/chromedriver
             options=self.getOptions(),
         )
 
@@ -31,9 +31,9 @@ class Selenium(WebDriver):
         availableSubFolder = os.listdir(os.path.join(folder, availableFolder[0]))
         return os.path.join(folder, availableFolder[0], availableSubFolder[0])
 
-    def getOptions(self) -> ChromeOptions:
+    def getOptions(self) -> Options:
         extensionFolder = self.getExtensionFolder()
-        options = ChromeOptions()
+        options = Options()
         options.enable_downloads = True
         options.add_argument(f"--load-extension={extensionFolder}")
         options.add_argument("--enable-managed-downloads")
@@ -58,7 +58,7 @@ class Selenium(WebDriver):
     def listDownloadableFiles(self, fileExtension: str = '.apk') -> List[str]:
         return [a.get_attribute("href") for a in self.find_elements(By.TAG_NAME, "a") if a.get_attribute("href") and a.get_attribute("href").endswith(fileExtension)]
     
-    def monitorDownloads(self, fun: callable, timeout: int = 25) -> str:
+    def monitorDownloads(self, fun: callable, timeout: int = 150) -> str:
         downloadsDir = os.path.join(os.path.expanduser("~"), "Downloads")
         for file in os.listdir(downloadsDir):
             if file.endswith(".apk"):
@@ -76,6 +76,6 @@ class Selenium(WebDriver):
             raise Exception(f"Timeout reached, file not downloaded")
         return os.path.join(downloadsDir, diff[0])
 
-    def downloadFile(self, download_link: str, timeout: int = 25) -> str:
+    def downloadFile(self, download_link: str, timeout: int = 150) -> str:
         fun = lambda: self.get(download_link)
         return self.monitorDownloads(fun, timeout)
