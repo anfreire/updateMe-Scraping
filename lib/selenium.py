@@ -7,7 +7,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from GLOBAL import GLOBAL
 import os
 from webdriver_manager.chrome import ChromeDriverManager
+from typing import List
 import time
+os.environ['WDM_LOG'] = '0'
+
 
 
 class Selenium(WebDriver):
@@ -34,6 +37,8 @@ class Selenium(WebDriver):
         options.enable_downloads = True
         options.add_argument(f"--load-extension={extensionFolder}")
         options.add_argument("--enable-managed-downloads")
+        options.add_argument(f"user-data-dir={os.path.expanduser('~')}/.config/chromium")
+        options.add_argument(f"--profile-directory=Profile 1")
         options.add_experimental_option(
             "prefs",
             {
@@ -50,16 +55,16 @@ class Selenium(WebDriver):
     def clickJS(self, element: WebElement) -> None:
         self.execute_script("arguments[0].click();", element)
 
-    def listDownloadableFiles(self, fileExtension: str = '.apk') -> dict:
+    def listDownloadableFiles(self, fileExtension: str = '.apk') -> List[str]:
         return [a.get_attribute("href") for a in self.find_elements(By.TAG_NAME, "a") if a.get_attribute("href") and a.get_attribute("href").endswith(fileExtension)]
     
-    def downloadFile(self, download_link: str, timeout: int = 25) -> str:
+    def monitorDownloads(self, fun: callable, timeout: int = 25) -> str:
         downloadsDir = os.path.join(os.path.expanduser("~"), "Downloads")
         for file in os.listdir(downloadsDir):
             if file.endswith(".apk"):
                 os.remove(os.path.join(downloadsDir, file))
         downloadedFiles = os.listdir(downloadsDir)
-        self.get(download_link)
+        fun()
         tries = 0
         while tries < timeout:
             diff = [file for file in list(set(os.listdir(downloadsDir)) - set(downloadedFiles)) if file.endswith(".apk")]
@@ -68,5 +73,9 @@ class Selenium(WebDriver):
             time.sleep(1)
             tries += 1
         if len(diff) == 0:
-            raise Exception(f"Timeout reached, file from {download_link} not downloaded")
+            raise Exception(f"Timeout reached, file not downloaded")
         return os.path.join(downloadsDir, diff[0])
+
+    def downloadFile(self, download_link: str, timeout: int = 25) -> str:
+        fun = lambda: self.get(download_link)
+        return self.monitorDownloads(fun, timeout)

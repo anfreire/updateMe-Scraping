@@ -60,6 +60,12 @@ class AppBase:
 
 	def process(self, provider_title: str, apk: Apk, path: str) -> None:
 		oldProvider = Index.index[self.app_title]["providers"][provider_title]
+		if apk.packageName != oldProvider["packageName"]:
+			GLOBAL.Log(
+				f"{self.app_title} - {provider_title} has different package name. Expected: {oldProvider['packageName']}, got: {apk.packageName}",
+				level="CRITICAL",
+			)
+			return
 		forced = False
 		if GLOBAL.Args.virustotal:
 			VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
@@ -102,6 +108,7 @@ class AppBase:
 
 	def update(self):
 		for provider_title, fun in self.providers.items():
+			GLOBAL.Log(f"Updating {self.app_title} - {provider_title}", level="INFO")
 			path = self.download(provider_title, fun)
 			if path is None:
 				continue

@@ -10,6 +10,10 @@ class Revanced(Selenium):
         self.link = f"https://revanced.net/{suffix}"
         super().__init__()
 
+    def __call__(self) -> str | None:
+        link = self.getLink()
+        return self.downloadFile(link) if link else None
+
     def getLink(self) -> str:
         self.get(self.link)
         tbodies = self.find_elements(By.TAG_NAME, "tbody")
@@ -27,23 +31,4 @@ class Revanced(Selenium):
                 break
             else:
                 link = None
-        return link if link else self.alt()
-
-    def get_bigger_version(self, versions: List[str]) -> str:
-        pattern = re.compile(r"_v([\d.]+)_cli")
-        versions_to_version = {
-            version: pattern.search(version).group(1) for version in versions
-        }
-        return max(versions_to_version, key=versions_to_version.get)
-
-    def get_link_gh(self, includes: List[str], excludes: List[str]) -> tuple:
-        gh = Github("revancedapps", "revanced.net")
-        versions = gh.getVersions()
-        count = 0
-        link = None
-        while link is None and count < len(versions):
-            links = gh.getLinks(versions[count], includes, excludes)
-            if len(links) > 0:
-                link = self.get_bigger_version(links)
-            count += 1
-        return (link, gh.origin)
+        return link

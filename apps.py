@@ -2,615 +2,454 @@ from utils.Index import Index
 from utils.AppBase import AppBase
 from lib.selenium import Selenium, By
 from providers.Github import Github
-from providers.Modyolo import Modyolo, Liteapks, Moddroid
+from providers.Modyolo import Modyolo, Liteapks
 from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
 from time import sleep
 from providers.Aero import Aero
-import re
 
 
 #####################################################################################
 # HDO
 def hdo():
-	# HDO
-	def HDO():
-		driver = Selenium()
-		return driver.downloadFile("https://hdo.app/download")
+    # HDO
+    def HDO():
+        return Selenium().downloadFile("https://hdo.app/download")
 
-	app = AppBase("HDO", {"HDO": HDO})
-	app.update()
+    app = AppBase("HDO", {"HDO": HDO})
+    app.update()
 
 
 #####################################################################################
 # YOUTUBE
-def youtube(index: Index):
-	# ReVanced
-	def revanced():
-		revanced = Revanced("youtube-revanced")
-		return revanced.getLink()
+def youtube():
+    # ReVanced
+    def revanced():
+        return Revanced("youtube-revanced")()
 
-	# ReVanced Extended
-	def revanced_extended():
-		gh = Revanced("revanced-youtube-extended")
-		return gh.getLink()
+    # ReVanced Extended
+    def revanced_extended():
+        return Revanced("revanced-youtube-extended")()
 
-	# ReVanced 2
-	def revanced2():
-		gh = Github("j-hc", "revanced-magisk-module")
-		versions = gh.getVersions()
-		count = 0
-		link = None
-		while link is None and count < len(versions):
-			links = gh.getLinks(
-				versions[count], [".apk", "youtube"], ["extended", "arm-v7a"]
-			)
-			if len(links) > 0:
-				link = links[0]
-				break
-			count += 1
-		return (link, gh.origin)
+    # ReVanced 2
+    def revanced2():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "youtube"], ["extended", "arm-v7a"]
+        )
 
-	# ReVanced Extended 2
-	def revanced_extended2():
-		gh = Github("j-hc", "revanced-magisk-module")
-		versions = gh.getVersions()
-		count = 0
-		link = None
-		while link is None and count < len(versions):
-			links = gh.getLinks(
-				versions[count], [".apk", "youtube-revanced-extended"], ["arm-v7a"]
-			)
-			if len(links) > 0:
-				link = links[0]
-				break
-			count += 1
-		return (link, gh.origin)
+    # ReVanced Extended 2
+    def revanced_extended2():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "youtube-revanced-extended"], ["arm-v7a"]
+        )
 
-	app = AppBase(
-		"YouTube",
-		{
-			"ReVanced": revanced,
-			"ReVanced Extended": revanced_extended,
-			"ReVanced (2)": revanced2,
-			"ReVanced Extended (2)": revanced_extended2,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "YouTube",
+        {
+            "ReVanced": revanced,
+            "ReVanced Extended": revanced_extended,
+            "ReVanced (2)": revanced2,
+            "ReVanced Extended (2)": revanced_extended2,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # YOUTUBE MUSIC
-def youtube_music(index: Index):
-	# ReVanced
-	def revanced():
-		revanced = Revanced("revanced-youtube-music")
-		return revanced.getLink()
+def youtube_music():
+    # ReVanced
+    def revanced():
+        return Revanced("revanced-youtube-music")()
 
-	# ReVanced Extended
-	def revanced_extended():
-		gh = Revanced("revanced-youtube-music-extended")
-		return gh.getLink()
+    # ReVanced Extended
+    def revanced_extended():
+        return Revanced("revanced-youtube-music-extended")()
 
-	# ReVanced 2
-	def revanced2():
-		gh = Github("j-hc", "revanced-magisk-module")
-		versions = gh.getVersions()
-		count = 0
-		link = None
-		while link is None and count < len(versions):
-			links = gh.getLinks(
-				versions[count], [".apk", "music"], ["extended", "arm-v7a"]
-			)
-			if len(links) > 0:
-				link = links[0]
-				break
-			count += 1
-		return (link, gh.origin)
+    # ReVanced 2
+    def revanced2():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "music"], ["extended", "arm-v7a"]
+        )
 
-	# ReVanced Extended 2
-	def revanced_extended2():
-		gh = Github("j-hc", "revanced-magisk-module")
-		versions = gh.getVersions()
-		count = 0
-		link = None
-		while link is None and count < len(versions):
-			links = gh.getLinks(
-				versions[count], [".apk", "music-revanced-extended"], ["arm-v7a"]
-			)
-			if len(links) > 0:
-				link = links[0]
-				break
-			count += 1
-		return (link, gh.origin)
+    # ReVanced Extended 2
+    def revanced_extended2():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "music-revanced-extended"], ["arm-v7a"]
+        )
 
-	app = AppBase(
-		"YouTube Music",
-		{
-			"ReVanced": revanced,
-			"ReVanced Extended": revanced_extended,
-			"ReVanced (2)": revanced2,
-			"ReVanced Extended (2)": revanced_extended2,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "YouTube Music",
+        {
+            "ReVanced": revanced,
+            "ReVanced Extended": revanced_extended,
+            "ReVanced (2)": revanced2,
+            "ReVanced Extended (2)": revanced_extended2,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # TWITCH
-def twitch(index: Index):
-	# ReVanced
-	def revanced():
-		revanced = Revanced("revanced-twitch")
-		return revanced.getLink()
+def twitch():
+    # ReVanced
+    def revanced():
+        return Revanced("revanced-twitch")()
 
-	app = AppBase("Twitch", {"ReVanced": revanced})
-	app.update(index)
+    # ReVanced (2)
+    def revanced2():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "twitch", "all"], ["arm-v7a"]
+        )
+
+    app = AppBase("Twitch", {"ReVanced": revanced, "ReVanced (2)": revanced2})
+    app.update()
 
 
 #####################################################################################
 # REDDIT
-def reddit(index: Index):
-	# ReVanced Extended
-	def revanced_extended():
-		revanced = Revanced("revanced-reddit-extended")
-		return revanced.getLink()
+def reddit():
+    # ReVanced Extended
+    def revanced_extended():
+        return Revanced("revanced-reddit-extended")()
 
-	app = AppBase(
-		"Reddit",
-		{"ReVanced": revanced_extended},
-	)
-	app.update(index)
+    app = AppBase(
+        "Reddit",
+        {"ReVanced": revanced_extended},
+    )
+    app.update()
 
 
 #####################################################################################
 # TIKTOK
-def tiktok(index: Index):
-	# ReVanced
-	def revanced():
-		revanced = Revanced("revanced-tiktok")
-		return revanced.getLink()
+def tiktok():
+    def revanced():
+        return Github("j-hc", "revanced-magisk-module")(
+            [".apk", "tiktok", "all"], ["arm-v7a"]
+        )
 
-	app = AppBase("TikTok", {"ReVanced": revanced})
-	app.update(index)
+    app = AppBase("TikTok", {"ReVanced": revanced})
+    app.update()
 
 
 #####################################################################################
 # MICROG
-def microg(index: Index):
-	def teamvanced():
-		gh = Github("ReVanced", "GmsCore")
-		latest = gh.getVersions()[0]
-		link = gh.getLinks(latest, ["signed", ".apk"], ["hw"])[0]
-		return (link, gh.origin)
+def microg():
+    def teamvanced():
+        return Github("ReVanced", "GmsCore")(["signed", ".apk"], ["hw"])
 
-	app = AppBase("MicroG", {"TeamVanced": teamvanced})
-	app.update(index)
+    app = AppBase("MicroG", {"TeamVanced": teamvanced})
+    app.update()
 
 
 #####################################################################################
 # SPOTIFY
-def spotify(index: Index):
+def spotify():
 
-	# MODYOLO
-	def modyolo():
-		driver = Modyolo("spotify-music-24463")
-		try:
-			link = driver.getLink()
-		except:
-			link = driver.getLink_alt()
-		return link
+    # MODYOLO
+    def modyolo():
+        return Modyolo("spotify-music-24463")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("spotify-music-98")
-		return (driver.getLink(), driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("spotify-music-98")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("spotify-mod")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("spotify-mod")()
 
-	app = AppBase(
-		"Spotify",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Spotify",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # PHOTO EDITOR PRO
-def photo_editor_pro(index: Index):
+def photo_editor_pro():
 
-	# MODYOLO
-	def modyolo():
-		driver = Modyolo("polish-photo-editor-pro-2578")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # MODYOLO
+    def modyolo():
+        return Modyolo("polish-photo-editor-pro-2578")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("polish-photo-editor-pro-491")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("polish-photo-editor-pro-491")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("photo-editor-pro-apk")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("photo-editor-pro-apk")()
 
-	app = AppBase(
-		"Photo Editor Pro",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Photo Editor Pro",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # PHOTOSHOP EXPRESS
-def photoshop_express(index: Index):
+def photoshop_express():
 
-	# MODYOLO
-	def modyolo():
-		driver = Modyolo("photoshop-express-12281")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # MODYOLO
+    def modyolo():
+        return Modyolo("photoshop-express-12281")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("photoshop-express-570")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("photoshop-express-570")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("adobe-photoshop-express")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("adobe-photoshop-express")()
 
-	app = AppBase(
-		"Photoshop Express",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Photoshop Express",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # CAPCUT
-def capcut(index: Index):
+def capcut():
 
-	# MODYOLO
-	def modyolo():
-		driver = Modyolo("capcut-video-editor-29058")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # MODYOLO
+    def modyolo():
+        return Modyolo("capcut-video-editor-29058")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("capcut-311")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("capcut-311")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("capcut-mod-apk")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("capcut-mod-apk")()
 
-	app = AppBase(
-		"CapCut",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "CapCut",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # INSHOT
-def inshot(index: Index):
+def inshot():
 
-	def modyolo():
-		driver = Modyolo("inshot-2257")
-		link = driver.getLink()
-		return (link, driver.origin)
+    def modyolo():
+        return Modyolo("inshot-2257")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("inshot-pro-107")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("inshot-pro-107")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("inshot")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("inshot")()
 
-	app = AppBase(
-		"InShot",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "InShot",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # INSTAGRAM
-def instagram(index: Index):
+def instagram():
 
-	# Instander
-	def instander():
-		driver = Selenium()
-		driver.openLink("https://thedise.me/instander/repo/")
-		a_tags = driver.getElements(By.XPATH, "//a")
-		for a in a_tags:
-			if a.text == "Clone":
-				a.click()
-				break
-		elements = driver.getElements(By.XPATH, "//a[@href]")
-		link = None
-		for element in elements:
-			if (
-				element.get_attribute("href")
-				and element.get_attribute("href").endswith(".apk")
-				and element.text.endswith("Clone")
-			):
-				link = element.get_attribute("href")
-				break
-		return link
-	
-	# HONINSTA
-	def honinsta():
-		driver = Selenium()
-		driver.openLink("https://honista.com/en/download.html")
-		elements = driver.getElements(By.XPATH, "//a[@href]")
-		link = None
-		for element in elements:
-			if (
-				element.get_attribute("href")
-				and element.get_attribute("href").endswith(".apk")
-			):
-				link = element.get_attribute("href")
-				break
-		return link
+    # Instander
+    def instander():
+        driver = Selenium()
+        driver.get("https://thedise.me/instander/repo/")
+        a_tags = driver.find_elements(By.XPATH, "//a")
+        for a in a_tags:
+            if a.text == "Clone":
+                a.click()
+                break
+        elements = driver.find_elements(By.XPATH, "//a[@href]")
+        link = None
+        for element in elements:
+            if (
+                element.get_attribute("href")
+                and element.get_attribute("href").endswith(".apk")
+                and element.text.endswith("Clone")
+            ):
+                link = element.get_attribute("href")
+                break
+        return driver.downloadFile(link)
 
-	# AeroInsta
-	def aeroinsta():
-		driver = Aero()
-		driver.open("https://aeroinsta.com/download-insta-aero/package-2/?lang=en")
-		driver.open(driver.get_href_by_text("Download via AeroMods.app (suggested)"))
-		sleep(8)
-		driver.click_span("checkbox-custom")
-		origin = driver.get_href_by_text("Redirect Me!")
-		driver.open(origin)
-		link = driver.get_href_by_ending_link(".apk")
-		return link
+    # HONINSTA
+    def honinsta():
+        driver = Selenium()
+        driver.get("https://honista.com/en/download.html")
+        elements = driver.find_elements(By.XPATH, "//a[@href]")
+        link = None
+        for element in elements:
+            if element.get_attribute("href") and element.get_attribute("href").endswith(
+                ".apk"
+            ):
+                link = element.get_attribute("href")
+                break
+        return driver.downloadFile(link)
 
-	app = AppBase(
-		"Instagram",
-		{
-			"Instander": instander,
-			"Honinsta": honinsta,
-			"AeroInsta": aeroinsta,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Instagram",
+        {
+            "Instander": instander,
+            "Honinsta": honinsta,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # TWITTER
-def twitter(index: Index):
-	# AeroWitter
-	def aeroWitter():
-		driver = Aero()
-		driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
-		driver.open(
-			driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
-		)
-		sleep(8)
-		driver.click_span("checkbox-custom")
-		origin = driver.get_href_by_text("Redirect Me!")
-		driver.open(origin)
-		return driver.get_href_by_ending_link(".apk")
+def twitter():
+    # AeroWitter
+    def aeroWitter():
+        driver = Aero()
+        driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
+        driver.open(
+            driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
+        )
+        sleep(8)
+        driver.click_span("checkbox-custom")
+        origin = driver.get_href_by_text("Redirect Me!")
+        driver.open(origin)
+        return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
 
-	app = AppBase(
-		"Twitter",
-		{
-			"AeroWitter": aeroWitter,
-		},
-	)
-	app.update(index)
-
-
-#####################################################################################
-# WHATSAPP
-def whatsapp(index: Index):
-
-	# FMWhatsApp
-	def fmwhatsapp():
-		driver = Selenium()
-		driver.openLink("https://fmmods.com/fouad-whatsapp/")
-		links = driver.getElements(By.XPATH, "//a[@href]")
-		links = [link for link in links if link.get_attribute("href").endswith(".apk")]
-		link = None
-		for l in links:
-			tag = l.get_attribute("href").split("/")[-1]
-			if tag.startswith("FMWA"):
-				link = l.get_attribute("href")
-				break
-		return link
-
-	# YMWhatsApp
-	def ymwhatsapp():
-		driver = Selenium()
-		driver.openLink("https://ymmods.net/download-ymwa-clone/")
-		# get all script tags
-		scripts = driver.getElements(By.XPATH, "//script")
-		link = None
-		for script in scripts:
-			pattern = re.compile(r"'(https://[^']+.apk)'")
-			links = pattern.findall(script.get_attribute("innerHTML"))
-			if len(links) > 0 and "YMWhatsApp" in links[0] and "Clone" in links[0]:
-				link = links[0]
-				break
-		return link
-
-	app = AppBase(
-		"WhatsApp",
-		{
-			"FMWhatsApp": fmwhatsapp,
-			"YMWhatsApp": ymwhatsapp,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Twitter",
+        {
+            "AeroWitter": aeroWitter,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # NEWPIPE
-def newpipe(index: Index):
+def newpipe():
 
-	def teamnewpipe():
-		gh = Github("TeamNewPipe", "NewPipe")
-		latest = gh.getVersions()[0]
-		link = gh.getLinks(latest, [".apk"])[0]
-		return (link, gh.origin)
+    def teamnewpipe():
+        return Github("TeamNewPipe", "NewPipe")([".apk"])
 
-	app = AppBase("NewPipe", {"TeamNewPipe": teamnewpipe})
-	app.update(index)
+    app = AppBase("NewPipe", {"TeamNewPipe": teamnewpipe})
+    app.update()
 
 
 #####################################################################################
 # SEAL
-def seal(index: Index):
+def seal():
 
-	def junkfood02():
-		gh = Github("JunkFood02", "Seal")
-		versions = gh.getVersions()
-		for version in versions:
-			link = gh.getLinks(version, ["universal", ".apk"])
-			if len(link):
-				return (link[0], gh.origin)
+    def junkfood02():
+        return Github("JunkFood02", "Seal")(["universal", ".apk"])
 
-	app = AppBase("Seal", {"JunkFood02": junkfood02})
-	app.update(index)
+    app = AppBase("Seal", {"JunkFood02": junkfood02})
+    app.update()
 
 
 #####################################################################################
 # SMARTLAUNCHER
-def smartlauncher(index: Index):
+def smartlauncher():
 
-	def modyolo():
-		driver = Modyolo("smart-launcher-6-27413")
-		link = driver.getLink()
-		return (link, driver.origin)
+    def modyolo():
+        return Modyolo("smart-launcher-6-27413")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("smart-launcher-6-184")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("smart-launcher-6-184")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("smart-launcher-5")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("smart-launcher-5")()
 
-	app = AppBase(
-		"Smart Launcher 6",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Smart Launcher 6",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
-def niagaralauncher(index: Index):
+def niagaralauncher():
 
-	def modyolo():
-		driver = Modyolo("niagara-launcher-63941")
-		link = driver.getLink()
-		return (link, driver.origin)
+    def modyolo():
+        return Modyolo("niagara-launcher-63941")()
 
-	# LITEAPKS
-	def liteapks():
-		driver = Liteapks("niagara-launcher-75423")
-		link = driver.getLink()
-		return (link, driver.origin)
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("niagara-launcher-75423")()
 
-	# APKDONE
-	def apkdone():
-		driver = ApkDone("niagara-launcher")
-		link = driver.getLink()
-		return link
+    # APKDONE
+    def apkdone():
+        return ApkDone("niagara-launcher")()
 
-	app = AppBase(
-		"Niagara Launcher",
-		{
-			"MODYOLO": modyolo,
-			"LITEAPKS": liteapks,
-			"APKDONE": apkdone,
-		},
-	)
-	app.update(index)
+    app = AppBase(
+        "Niagara Launcher",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
 # REVANCED MANAGER
-def revancedManager(index: Index):
+def revancedManager():
 
-	def ReVanced():
-		gh = Github("ReVanced", "revanced-manager")
-		latest = gh.getVersions()[0]
-		link = gh.getLinks(latest, [".apk"])[0]
-		return (link, gh.origin)
+    def ReVanced():
+        return Github("ReVanced", "revanced-manager")([".apk"])
 
-	app = AppBase("ReVanced Manager", {"ReVanced": ReVanced})
-	app.update(index)
+    app = AppBase("ReVanced Manager", {"ReVanced": ReVanced})
+    app.update()
 
 
 #####################################################################################
 # YTDLNIS
-def ytdlnis(index: Index):
-	def ytdlnis():
-		gh = Github("deniscerri", "ytdlnis")
-		latest = gh.getVersions()[0]
-		link = gh.getLinks(latest, [".apk", "universal"])[0]
-		return (link, gh.origin)
+def ytdlnis():
+    def ytdlnis():
+        return Github("deniscerri", "ytdlnis")([".apk", "universal"])
 
-	app = AppBase("YTDLnis", {"deniscerr": ytdlnis})
-	app.update(index)
+    app = AppBase("YTDLnis", {"deniscerr": ytdlnis})
+    app.update()
 
 
 #####################################################################################
 # NEVER HAVE I EVER
-def neverhaveiever(index: Index):
-	# LiteApks
-	def liteapks():
-		driver = Liteapks("never-have-i-ever-194362")
-		return (driver.getLink(), driver.origin)
-	
-	app = AppBase("Never Have I Ever", {"LiteApks": liteapks})
-	app.update(index)
+def neverhaveiever():
+    # LiteApks
+    def liteapks():
+        return Liteapks("never-have-i-ever-194362")()
+
+    app = AppBase("Never Have I Ever", {"LiteApks": liteapks})
+    app.update()

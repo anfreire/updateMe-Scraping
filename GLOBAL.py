@@ -15,12 +15,13 @@ class Paths:
 
 
 class Log:
-    def __init__(self):
+    def __init__(self, debug: bool):
         self.clean()
         logging.basicConfig(
             filename=Paths.LogFile,
-            level=logging.INFO,
-            format="%(asctime)s:%(levelname)s:%(message)s",
+            level=logging.INFO if not debug else logging.DEBUG,
+            format="\n[ %(levelname)s ] [ %(asctime)s ]\n%(message)s",
+            datefmt="%m/%d/%Y - %H:%M",
         )
 
     def clean(self):
@@ -59,6 +60,9 @@ class Args:
         self.parser.add_argument(
             "-c", "--config", help="Edit config file", action="store_true"
         )
+        self.parser.add_argument(
+            "-d", "--debug", help="Debug mode", action="store_true"
+        )
         self.args = self.parser.parse_args()
 
     @property
@@ -76,6 +80,10 @@ class Args:
     @property
     def config(self):
         return self.args.config
+    
+    @property
+    def debug(self):
+        return self.args.debug
 
 
 class Config:
@@ -135,8 +143,8 @@ class GLOBAL:
         if not cls.istance:
             cls.istance = super(GLOBAL, cls).__new__(cls)
             cls.Paths = Paths()
-            cls.Log = Log()
             cls.Args = Args()
+            cls.Log = Log(cls.Args.debug)
             cls.Config = Config()
             cls.Log("Global instance created")
             cls.Log(f"Args: {cls.Args.args}")

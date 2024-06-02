@@ -17,7 +17,7 @@ class Github:
         if delete_result.returncode != 0:
             GLOBAL.Log(f"Error deleting {filename} from release", level="ERROR")
         else:
-            GLOBAL.Log(f"Deleted {filename} from release")
+            GLOBAL.Log(f"Deleted {filename} from release", level="INFO")
         upload_result = subprocess.run(
             f"cd {GLOBAL.Paths.AppsDir} && gh release upload apps {filename}",
             shell=True,
@@ -27,8 +27,8 @@ class Github:
         if upload_result.returncode != 0:
             GLOBAL.Log(f"Error uploading {filename} to release. {upload_result.stderr.decode()}", level="CRITICAL")
         else:
-            GLOBAL.Log(f"Uploaded {filename} to release")
-        return f"https://github.com/anfreire/UpdateMeData/releases/download/apps/{filename}"
+            GLOBAL.Log(f"Uploaded {filename} to release", level="INFO")
+        return f"https://github.com/anfreire/UpdateMe-Data/releases/download/apps/{filename}"
 
     @classmethod
     def push_index(cls, message: str = "") -> None:
@@ -41,4 +41,4 @@ class Github:
         os.system(
             f"cd {GLOBAL.Paths.DataDir} && git add index.json && git commit -m '{message}' && git push -f"
         )
-        GLOBAL.Log(f"Pushed index.json to Github")
+        GLOBAL.Log(f"Pushed index.json to Github", level="INFO")
