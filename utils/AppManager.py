@@ -212,6 +212,10 @@ class AppManager:
 
     def addApp(self) -> bool:
         if os.path.exists(GLOBAL.Paths.NewAppBackupFile):
+            GLOBAL.Log(
+                "Found a backup of a new app creation",
+                level="INFO",
+            )
             with open(GLOBAL.Paths.NewAppBackupFile, "rb") as file:
                 self.variables = pickle.load(file)
             with self.term.fullscreen():
@@ -228,12 +232,14 @@ class AppManager:
                 with self.term.cbreak():
                     if self.term.inkey().lower() != "y":
                         self.variables = {}
+                        GLOBAL.Log("Discarding backup of a new app creation", level="INFO")
                     else:
                         print(self.term.clear)
                         print(
                             self.term.move_xy(0, 0)
                             + "Continuing the creation of the app..."
                         )
+                        GLOBAL.Log("Continuing the creation of the app from backup", level="INFO")
         apps = list(Index.index.keys())
         features = list(
             {feature for app in Index.index.values() for feature in app.features}
