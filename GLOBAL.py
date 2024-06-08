@@ -9,9 +9,12 @@ class Paths:
 	ScriptDir: str = os.path.dirname(os.path.realpath(__file__))
 	DataDir: str = os.path.join(ScriptDir, "..", "Data")
 	AppsDir: str = os.path.join(DataDir, "apps")
+	IconsDir: str = os.path.join(DataDir, "icons")
 	IndexFile: str = os.path.join(DataDir, "index.json")
 	LogFile: str = os.path.join(ScriptDir, ".log")
 	ConfigFile: str = os.path.join(ScriptDir, ".ini")
+	AppsScriptFile: str = os.path.join(ScriptDir, "apps.py")
+	NewAppBackupFile: str = os.path.join(ScriptDir, "new_app.pkl")
 
 
 class Log:
@@ -66,6 +69,9 @@ class Args:
 		self.parser.add_argument(
 			"-x", "--xhost", help="Use xhost: Display", action="store_true"
 		)
+		self.parser.add_argument(
+			"-n", "--new", help="Add new app", action="store_true"
+		)
 		self.args = self.parser.parse_args()
 
 	@property
@@ -91,6 +97,10 @@ class Args:
 	@property
 	def xhost(self):
 		return self.args.xhost
+	
+	@property
+	def new(self):
+		return self.args.new
 
 
 class Config:

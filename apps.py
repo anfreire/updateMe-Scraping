@@ -453,3 +453,12 @@ def neverhaveiever():
 
     app = AppBase("Never Have I Ever", {"LiteApks": liteapks})
     app.update()
+#####################################################################################
+# LAWNCHAIR
+def lawnchair():
+
+# LawnchairLauncher
+	def lawnchairlauncher():
+		return None
+	app = AppBase("Lawnchair", {"LawnchairLauncher": lawnchairlauncher})
+	app.update()

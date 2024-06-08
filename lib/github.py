@@ -42,3 +42,18 @@ class Github:
             f"cd {GLOBAL.Paths.DataDir} && git add index.json && git commit -m '{message}' && git push -f"
         )
         GLOBAL.Log(f"Pushed index.json to Github", level="INFO")
+
+    @classmethod
+    def push_icon(cls, path: str) -> str:
+        filename = path.split("/")[-1]
+        push_result = subprocess.run(
+            f"cd {GLOBAL.Paths.IconsDir} && git add {filename} && git commit -m '{filename}' && git push -f",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if push_result.returncode != 0:
+            GLOBAL.Log(f"Error pushing {filename}. {push_result.stderr.decode()}", level="CRITICAL")
+        else:
+            GLOBAL.Log(f"Pushed {filename} to Github", level="INFO")
+        return f"https://raw.githubusercontent.com/anfreire/updateMe/gh-pages/scripts/icons/{filename}"
