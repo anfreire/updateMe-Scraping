@@ -21,7 +21,7 @@ class Log:
 			filename=Paths.LogFile,
 			level=logging.INFO if not debug else logging.DEBUG,
 			format="\n[ %(levelname)s ] [ %(asctime)s ]\n%(message)s",
-			datefmt="%m/%d/%Y - %H:%M",
+			datefmt="%m/%d/%Y - %H:%M:%S",
 		)
 
 	def clean(self):
