@@ -451,7 +451,7 @@ def neverhaveiever():
     def liteapks():
         return Liteapks("never-have-i-ever-194362")()
 
-    app = AppBase("Never Have I Ever", {"LiteApks": liteapks})
+    app = AppBase("Never Have I Ever", {"LITEAPKSks": liteapks})
     app.update()
 
 
@@ -465,3 +465,88 @@ def lawnchair():
 
     app = AppBase("Lawnchair", {"LawnchairLauncher": lawnchairlauncher})
     app.update()
+
+
+
+#####################################################################################
+# BOREALIS
+def borealis():
+
+	# MODYOLO
+	def modyolo():
+		return Modyolo("borealis-icon-pack-67728")()
+
+	# LiteApks
+	def liteapks():
+		return Liteapks("borealis-icon-pack-23491")()
+
+	app = AppBase("Borealis", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+	app.update()
+
+
+
+#####################################################################################
+# LAYERS
+def layers():
+
+	# MODYOLO
+	def modyolo():
+		return Modyolo("layers-icon-pack-54734")()
+
+	# LITEAPKS
+	def liteapks():
+		return Liteapks("layers-glass-icon-pack-401063")()
+
+	app = AppBase("Layers", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+	app.update()
+
+
+
+#####################################################################################
+# AUSTRALIS
+def australis():
+
+	# MODYOLO
+	def modyolo():
+		return Modyolo("australis-icon-pack-208797")()
+
+	# LiteApks
+	def liteapks():
+		return Liteapks("australis-icon-pack-142596")()
+
+	app = AppBase("Australis", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+	app.update()
+
+
+
+#####################################################################################
+# VERA
+def vera():
+
+	# MODYOLO
+	def modyolo():
+		return Modyolo("vera-icon-pack-54724")()
+
+	# LITEAPKS
+	def liteapks():
+		return Liteapks("vera-icon-pack-22930")()
+
+	app = AppBase("Vera", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+	app.update()
+
+
+
+#####################################################################################
+# LINEBIT
+def linebit():
+
+	# MODYOLO
+	def modyolo():
+		return Modyolo("linebit-icon-pack-13472")()
+
+	# LITEAPKS
+	def liteapks():
+		return Liteapks("linebit-22796")()
+
+	app = AppBase("Linebit", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+	app.update()

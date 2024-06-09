@@ -62,14 +62,6 @@ class AppManager:
                 + self.term.normal
             )
             error = True
-        elif icon.split(".")[-1] != "png":
-            print(
-                self.term.move_xy(0, 2)
-                + self.term.red
-                + "Icon must be a png!"
-                + self.term.normal
-            )
-            error = True
         elif os.path.exists(
             iconPath := os.path.join(
                 GLOBAL.Paths.IconsDir,
