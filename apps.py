@@ -459,8 +459,9 @@ def neverhaveiever():
 # LAWNCHAIR
 def lawnchair():
 
-# LawnchairLauncher
-	def lawnchairlauncher():
-		return None
-	app = AppBase("Lawnchair", {"LawnchairLauncher": lawnchairlauncher})
-	app.update()
+    # LawnchairLauncher
+    def lawnchairlauncher():
+        return Github("LawnchairLauncher", "Lawnchair")(["Lawnchair", ".apk"])
+
+    app = AppBase("Lawnchair", {"LawnchairLauncher": lawnchairlauncher})
+    app.update()
