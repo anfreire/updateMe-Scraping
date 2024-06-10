@@ -40,6 +40,7 @@ class Log:
 			getattr(logging, level.lower())(message, exc_info=True, stack_info=True)
 		else:
 			getattr(logging, level.lower())(message)
+		print(f"[ {level} ]\n{message}\n\n")
 
 	def __call__(
 		self,

@@ -56,4 +56,4 @@ class Github:
             GLOBAL.Log(f"Error pushing {filename}. {push_result.stderr.decode()}", level="CRITICAL")
         else:
             GLOBAL.Log(f"Pushed {filename} to Github", level="INFO")
-        return f"https://raw.githubusercontent.com/anfreire/updateMe/gh-pages/scripts/icons/{filename}"
+        return f"https://raw.githubusercontent.com/anfreire/updateMe-Data/main/icons/icons/{filename}"
