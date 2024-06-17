@@ -2,7 +2,7 @@ from utils.Index import Index
 from utils.AppBase import AppBase
 from lib.selenium import Selenium, By
 from providers.Github import Github
-from providers.Modyolo import Modyolo, Liteapks
+from providers.Modyolo import Modyolo, Liteapks, ApkLite
 from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
 from time import sleep
@@ -451,7 +451,7 @@ def neverhaveiever():
     def liteapks():
         return Liteapks("never-have-i-ever-194362")()
 
-    app = AppBase("Never Have I Ever", {"LITEAPKSks": liteapks})
+    app = AppBase("Never Have I Ever", {"LITEAPKS": liteapks})
     app.update()
 
 
@@ -550,9 +550,53 @@ def linebit():
 #####################################################################################
 # SOUNDCLOUD
 def soundcloud():
+
+    # # MODYOLO
+    # def modyolo():
+    #     return Modyolo("soundcloud-2329")()
+
+    # # LITEAPKS
+    # def liteapks():
+    #     return Liteapks("soundcloud-119161")()
+
     # APKDONE
     def apkdone():
         return ApkDone("soundcloud")()
 
-    app = AppBase("SoundCloud", {"APKDONE": apkdone})
+    app = AppBase(
+        "SoundCloud",
+        {
+            # "MODYOLO": modyolo,
+            # "LITEAPKS": liteapks,
+            "APKDONE": apkdone
+        },
+    )
+    app.update()
+
+
+#####################################################################################
+# IPTV PRO
+def iptvpro():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("iptv-pro-34294")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("iptv-pro-76245")()
+
+    app = AppBase("IPTV Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# PERFECT IPTV PLAYER
+def perfectiptvplayer():
+
+    # APKLITE
+    def liteapks():
+        return Liteapks("perfect-iptv-player-363415")()
+
+    app = AppBase("Perfect IPTV Player", {"LITEAPKS": liteapks})
     app.update()
