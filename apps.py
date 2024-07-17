@@ -2,7 +2,7 @@ from utils.Index import Index
 from utils.AppBase import AppBase
 from lib.selenium import Selenium, By
 from providers.Github import Github
-from providers.Modyolo import Modyolo, Liteapks, ApkLite
+from providers.Modyolo import Modyolo, Liteapks
 from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
 from time import sleep
@@ -326,29 +326,29 @@ def instagram():
     app.update()
 
 
-# #####################################################################################
-# # TWITTER
-# def twitter():
-#     # AeroWitter
-#     def aeroWitter():
-#         driver = Aero()
-#         driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
-#         driver.open(
-#             driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
-#         )
-#         sleep(8)
-#         driver.click_span("checkbox-custom")
-#         origin = driver.get_href_by_text("Redirect Me!")
-#         driver.open(origin)
-#         return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
+#####################################################################################
+# TWITTER
+def twitter():
+   # AeroWitter
+   def aeroWitter():
+       driver = Aero()
+       driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
+       driver.open(
+           driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
+       )
+       sleep(8)
+       driver.click_span("checkbox-custom")
+       origin = driver.get_href_by_text("Redirect Me!")
+       driver.open(origin)
+       return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
 
-#     app = AppBase(
-#         "Twitter",
-#         {
-#             "AeroWitter": aeroWitter,
-#         },
-#     )
-#     app.update()
+   app = AppBase(
+       "Twitter",
+       {
+           "AeroWitter": aeroWitter,
+       },
+   )
+   app.update()
 
 
 #####################################################################################
@@ -461,9 +461,14 @@ def lawnchair():
 
     # LawnchairLauncher
     def lawnchairlauncher():
-        return Github("LawnchairLauncher", "Lawnchair")(["Lawnchair", ".apk"])
+        return Github("LawnchairLauncher", "lawnchair")(["Lawnchair", ".apk"])
 
-    app = AppBase("Lawnchair", {"LawnchairLauncher": lawnchairlauncher})
+    def gooogler():
+        return Github("Goooler", "LawnchairRelease")(["Lawnchair", ".apk"])
+
+    app = AppBase(
+        "Lawnchair", {"LawnchairLauncher": lawnchairlauncher, "Goooler": gooogler}
+    )
     app.update()
 
 
@@ -599,4 +604,155 @@ def perfectiptvplayer():
         return Liteapks("perfect-iptv-player-363415")()
 
     app = AppBase("Perfect IPTV Player", {"LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# AUTOMATE
+def automate():
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("automate-360715")()
+
+    app = AppBase("Automate", {"LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# AUTO CLICKER MACRO: CLICKMATE
+def clickmate():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("auto-clicker-macro-clickmate-102404")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("auto-clicker-macro-clickmate-34853")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("clickmate")()
+
+    app = AppBase(
+        "Clickmate", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# TASKER
+def tasker():
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("tasker-369228")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("tasker")()
+
+    app = AppBase("Tasker", {"LITEAPKS": liteapks, "APKDONE": apkdone})
+    app.update()
+
+
+#####################################################################################
+# XODO
+def xodo():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("xodo-pdf-reader-editor-5752")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("xodo-pdf-reader-editor-78598")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("xodo-pdf-reader-editor")()
+
+    app = AppBase(
+        "Xodo", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# BRILLIANT
+def brilliant():
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("brilliant")()
+
+    app = AppBase("Brilliant", {"APKDONE": apkdone})
+    app.update()
+
+
+#####################################################################################
+# MUSIXMATCH
+def musixmatch():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("musixmatch-17890")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("musixmatch-3761")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("musixmatch")()
+
+    app = AppBase(
+        "Musixmatch", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# ONSTREAM
+def onstream():
+
+    # OnStream
+    def onstream():
+        driver = Selenium()
+        return driver.downloadFile("https://dl.getmenow.click/onstream-latest.apk")
+
+    app = AppBase("OnStream", {"OnStream": onstream})
+    app.update()
+
+
+#####################################################################################
+# TELEGRAM
+def telegram():
+
+    # NekoX
+    def nekox():
+        return Github("NekoX-Dev", "NekoX")(["full, arm64", ".apk"], ["NoGcm"])
+
+    # Forkgram
+    def forkgram():
+        return Github("forkgram", "TelegramAndroid")([".apk"])
+
+    app = AppBase("Telegram", {"NekoX": nekox, "Forkgram": forkgram})
+    app.update()
+
+
+#####################################################################################
+# SHOWLY
+def showly():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("showly-58960")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("showly-13824")()
+
+    app = AppBase("Showly", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
     app.update()

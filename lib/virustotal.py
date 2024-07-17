@@ -42,6 +42,13 @@ class VirusTotal:
             return cls.client.scan_file(file)
 
     @classmethod
+    def get_submited_file(cls, sha256: str) -> vt.Object | None:
+        try:
+            return cls.client.get_object(f"/files/{sha256}")
+        except vt.error.APIError:
+            return None
+
+    @classmethod
     def can_make_request(cls) -> bool:
         if cls.last_minute is None or time.time() - cls.last_minute > 60:
             return True
@@ -66,6 +73,24 @@ class VirusTotal:
                 )
                 printed = True
             time.sleep(1)
+
+    @classmethod
+    def check_previous_submissions(cls, path: str, sha256: str) -> None | bool:
+        cls.wait_requests_available()
+        cls.register_request()
+        analysis = cls.get_submited_file(sha256)
+        if analysis is None or not any([name in path for name in analysis.names]):
+            return None
+        return (
+            True
+            if any(
+                [
+                    analysis.last_analysis_stats["malicious"],
+                    analysis.last_analysis_stats["suspicious"],
+                ]
+            )
+            else False
+        )
 
     @classmethod
     def add(cls, appname: str, provider: str, path: str, sha256: str) -> None:

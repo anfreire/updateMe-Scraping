@@ -61,8 +61,10 @@ class Selenium(WebDriver):
     def monitorDownloads(self, fun: callable, timeout: int = 150) -> str:
         downloadsDir = os.path.join(os.path.expanduser("~"), "Downloads")
         for file in os.listdir(downloadsDir):
-            if file.endswith(".apk"):
+            try:
                 os.remove(os.path.join(downloadsDir, file))
+            except:
+                pass
         downloadedFiles = os.listdir(downloadsDir)
         fun()
         tries = 0

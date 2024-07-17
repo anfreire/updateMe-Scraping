@@ -4,15 +4,21 @@ from utils.Index import Index
 from utils.AppManager import AppManager
 from lib.github import Github
 from pyvirtualdisplay import Display
+
 #############|
-GLOBAL()#####|
-VirusTotal()#|
-Index()######|
+GLOBAL()  #####|
+VirusTotal()  # |
+Index()  ######|
 #############|
 import inspect
 import apps
 
-funs = {name: function for name, function in [o for o in inspect.getmembers(apps) if inspect.isfunction(o[1])]}
+funs = {
+    name: function
+    for name, function in [
+        o for o in inspect.getmembers(apps) if inspect.isfunction(o[1])
+    ]
+}
 
 if __name__ == "__main__":
     display = None
@@ -20,7 +26,7 @@ if __name__ == "__main__":
 
     if GLOBAL.Args.new:
         pushChanges = AppManager().addApp()
-    
+
     else:
         if not GLOBAL.Args.xhost:
             display = Display(visible=0, size=(800, 600))
@@ -40,8 +46,11 @@ if __name__ == "__main__":
             for app in funs:
                 funs[app]()
         for analysis in VirusTotal.wait_queue():
+            print(analysis)
             if analysis.infected:
-                Index.index[analysis.appname]["providers"][analysis.provider]["infected"] = True
+                Index.index[analysis.appname]["providers"][analysis.provider][
+                    "safe"
+                ] = False
                 Index.write()
 
     if pushChanges:
