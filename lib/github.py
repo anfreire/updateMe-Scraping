@@ -57,3 +57,10 @@ class Github:
         else:
             GLOBAL.Log(f"Pushed {filename} to Github", level="INFO")
         return f"https://raw.githubusercontent.com/anfreire/updateMe-Data/main/icons/{filename}"
+    
+    @classmethod
+    def push_categories(self) -> None:
+        os.system(
+            f"cd {GLOBAL.Paths.DataDir} && git add categories.json && git commit -m 'categories.json' && git push -f"
+        )
+        GLOBAL.Log(f"Pushed categories.json to Github", level="INFO")

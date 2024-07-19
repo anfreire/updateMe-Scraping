@@ -2,14 +2,15 @@ from GLOBAL import GLOBAL
 from lib.virustotal import VirusTotal
 from utils.Index import Index
 from utils.AppManager import AppManager
+from utils.newApp import NewApp
 from lib.github import Github
 from pyvirtualdisplay import Display
 
-#############|
-GLOBAL()  #####|
-VirusTotal()  # |
-Index()  ######|
-#############|
+###############
+GLOBAL()  #####
+VirusTotal()  #
+Index()  ######
+###############
 import inspect
 import apps
 
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     pushChanges = True
 
     if GLOBAL.Args.new:
-        pushChanges = AppManager().addApp()
+        pushChanges = NewApp()()
 
     else:
         if not GLOBAL.Args.xhost:
@@ -46,7 +47,6 @@ if __name__ == "__main__":
             for app in funs:
                 funs[app]()
         for analysis in VirusTotal.wait_queue():
-            print(analysis)
             if analysis.infected:
                 Index.index[analysis.appname]["providers"][analysis.provider][
                     "safe"

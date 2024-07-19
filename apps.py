@@ -1,6 +1,6 @@
 from utils.Index import Index
 from utils.AppBase import AppBase
-from lib.selenium import Selenium, By
+from lib.selenium import Selenium, By, WebDriverWait
 from providers.Github import Github
 from providers.Modyolo import Modyolo, Liteapks
 from providers.Apkdone import ApkDone
@@ -316,11 +316,31 @@ def instagram():
                 break
         return driver.downloadFile(link)
 
+    # HONINSTA
+    def myinsta():
+        driver = Selenium()
+        driver.get("https://myinsta.app/")
+        elements = driver.find_elements(By.XPATH, "//a[@href]")
+        link = None
+        for element in elements:
+            if (
+                element.get_attribute("href")
+                and element.get_attribute("href").endswith(".apk")
+                and (
+                    "UC" not in element.get_attribute("href")
+                    or "unclone" not in element.get_attribute("href").lower()
+                )
+            ):
+                link = element.get_attribute("href")
+                break
+        return driver.downloadFile(link)
+
     app = AppBase(
         "Instagram",
         {
             "Instander": instander,
             "Honinsta": honinsta,
+            "MyInsta": myinsta,
         },
     )
     app.update()
@@ -329,26 +349,26 @@ def instagram():
 #####################################################################################
 # TWITTER
 def twitter():
-   # AeroWitter
-   def aeroWitter():
-       driver = Aero()
-       driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
-       driver.open(
-           driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
-       )
-       sleep(8)
-       driver.click_span("checkbox-custom")
-       origin = driver.get_href_by_text("Redirect Me!")
-       driver.open(origin)
-       return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
+    # AeroWitter
+    def aeroWitter():
+        driver = Aero()
+        driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
+        driver.open(
+            driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
+        )
+        sleep(8)
+        driver.click_span("checkbox-custom")
+        origin = driver.get_href_by_text("Redirect Me!")
+        driver.open(origin)
+        return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
 
-   app = AppBase(
-       "Twitter",
-       {
-           "AeroWitter": aeroWitter,
-       },
-   )
-   app.update()
+    app = AppBase(
+        "Twitter",
+        {
+            "AeroWitter": aeroWitter,
+        },
+    )
+    app.update()
 
 
 #####################################################################################
@@ -732,7 +752,7 @@ def telegram():
 
     # NekoX
     def nekox():
-        return Github("NekoX-Dev", "NekoX")(["full, arm64", ".apk"], ["NoGcm"])
+        return Github("NekoX-Dev", "NekoX")(["arm64", ".apk"], ["NoGcm"])
 
     # Forkgram
     def forkgram():
@@ -755,4 +775,209 @@ def showly():
         return Liteapks("showly-13824")()
 
     app = AppBase("Showly", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# CAMSCANNER
+def camscanner():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("camscanner-5320")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("camscanner-320")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("camscanner")()
+
+    app = AppBase(
+        "CamScanner", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# APP CLONER
+def appcloner():
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("app-cloner-154")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("app-cloner-mod-apk")()
+
+    app = AppBase("App Cloner", {"LITEAPKS": liteapks, "APKDONE": apkdone})
+    app.update()
+
+
+#####################################################################################
+# ADGUARD
+def adguard():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("adguard-28793")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("adguard-819")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("adguard-premium")()
+
+    app = AppBase(
+        "AdGuard", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# PICSART
+def picsart():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("picsart-photo-editor-8131")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("picsart-136")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("picsart-app")()
+
+    app = AppBase(
+        "Picsart", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# FITIFY
+def fitify():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("fitify-26376")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("fitify-8086")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("fitify")()
+
+    app = AppBase(
+        "Fitify", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# ENIX
+def enix():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("enix-icon-pack-17851")()
+
+    app = AppBase("ENIX", {"MODYOLO": modyolo})
+    app.update()
+
+
+#####################################################################################
+# WPS OFFICE
+def wpsoffice():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("wps-office-244438")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("wps-office-464")()
+
+    app = AppBase("WPS Office", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# X-PLORE FILE MANAGER
+def xplorefilemanager():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("x-plore-file-manager-48771")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("x-plore-file-manager-26189")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("x-plore-file-manager")()
+
+    app = AppBase(
+        "X-plore File Manager",
+        {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone},
+    )
+    app.update()
+
+
+#####################################################################################
+# TRUECALLER
+def truecaller():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("truecaller-261629")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("truecaller-89")()
+
+    app = AppBase("Truecaller", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# CROMITE
+def cromite():
+
+    # uazo
+    def uazo():
+        return Github("uazo", "cromite")(["arm64", "apk"], ["mapping"])
+
+    app = AppBase("Cromite", {"uazo": uazo})
+    app.update()
+
+
+#####################################################################################
+# ADOBE LIGHTROOM
+def adobelightroom():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("adobe-lightroom-6604")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("adobe-lightroom-205")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("adobe-lightroom")()
+
+    app = AppBase(
+        "Lightroom", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
     app.update()

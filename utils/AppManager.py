@@ -5,6 +5,41 @@ from lib.github import Github
 import os
 import requests
 import pickle
+from typing import TypedDict, Literal
+
+GITHUB_PROVIDER_TYPE = TypedDict(
+    "github",
+    {
+        "user": str,
+        "repo": str,
+        "include_words": list[str],
+        "exclude_words": list[str],
+    },
+)
+
+DEFINED_PROVIDER_TYPE = TypedDict(
+    "defined",
+    {
+        "provider": Literal["modyolo", "liteapks", "apkdone", "revanced"],
+        "tag": str,
+    },
+)
+
+CUSTOM_FIND_PROVIDER_TYPE = TypedDict(
+    "custom",
+    {
+        "link": str,
+        "include_words": list[str],
+        "exclude_words": list[str],
+    },
+)
+
+CUSTOM_DIRECT_PROVIDER_TYPE = TypedDict(
+    "custom_direct",
+    {
+        "link": str,
+    },
+)
 
 
 class AppManager:
@@ -224,14 +259,19 @@ class AppManager:
                 with self.term.cbreak():
                     if self.term.inkey().lower() != "y":
                         self.variables = {}
-                        GLOBAL.Log("Discarding backup of a new app creation", level="INFO")
+                        GLOBAL.Log(
+                            "Discarding backup of a new app creation", level="INFO"
+                        )
                     else:
                         print(self.term.clear)
                         print(
                             self.term.move_xy(0, 0)
                             + "Continuing the creation of the app..."
                         )
-                        GLOBAL.Log("Continuing the creation of the app from backup", level="INFO")
+                        GLOBAL.Log(
+                            "Continuing the creation of the app from backup",
+                            level="INFO",
+                        )
         apps = list(Index.index.keys())
         features = list(
             {feature for app in Index.index.values() for feature in app.features}
@@ -311,7 +351,7 @@ class AppManager:
                     + "{"
                     + ", ".join(
                         [
-                            f'\"{providerName}\": {providerName.replace(" ", "").lower()}'
+                            f'"{providerName}": {providerName.replace(" ", "").lower()}'
                             for providerName in self.variables["providers"]
                         ]
                     )
