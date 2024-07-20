@@ -1,6 +1,7 @@
 from utils.Index import Index
 from utils.AppBase import AppBase
 from lib.selenium import Selenium, By, WebDriverWait
+from providers.Simple import Simple
 from providers.Github import Github
 from providers.Modyolo import Modyolo, Liteapks
 from providers.Apkdone import ApkDone
@@ -282,7 +283,7 @@ def inshot():
 def instagram():
 
     # Instander
-    def instander():
+    def instander_clone():
         driver = Selenium()
         driver.get("https://thedise.me/instander/repo/")
         a_tags = driver.find_elements(By.XPATH, "//a")
@@ -302,22 +303,21 @@ def instagram():
                 break
         return driver.downloadFile(link)
 
-    # HONINSTA
-    def honinsta():
-        driver = Selenium()
-        driver.get("https://honista.com/en/download.html")
-        elements = driver.find_elements(By.XPATH, "//a[@href]")
-        link = None
-        for element in elements:
-            if element.get_attribute("href") and element.get_attribute("href").endswith(
-                ".apk"
-            ):
-                link = element.get_attribute("href")
-                break
-        return driver.downloadFile(link)
+    def instander_unclone():
+        return Simple()(
+            "https://thedise.me/instander/repo/",
+            exclude=["clone"],
+        )
 
     # HONINSTA
-    def myinsta():
+    def honinsta():
+        return Simple()(
+            "https://honista.com/en/download.html",
+            include=["64"],
+            exclude=["32"],
+        )
+
+    def myinsta_clone():
         driver = Selenium()
         driver.get("https://myinsta.app/")
         elements = driver.find_elements(By.XPATH, "//a[@href]")
@@ -326,10 +326,22 @@ def instagram():
             if (
                 element.get_attribute("href")
                 and element.get_attribute("href").endswith(".apk")
-                and (
-                    "UC" not in element.get_attribute("href")
-                    or "unclone" not in element.get_attribute("href").lower()
-                )
+                and "clone" in element.text.lower()
+            ):
+                link = element.get_attribute("href")
+                break
+        return driver.downloadFile(link)
+
+    def myinsta_unclone():
+        driver = Selenium()
+        driver.get("https://myinsta.app/")
+        elements = driver.find_elements(By.XPATH, "//a[@href]")
+        link = None
+        for element in elements:
+            if (
+                element.get_attribute("href")
+                and element.get_attribute("href").endswith(".apk")
+                and "unclone" in element.text.lower()
             ):
                 link = element.get_attribute("href")
                 break
@@ -338,9 +350,11 @@ def instagram():
     app = AppBase(
         "Instagram",
         {
-            "Instander": instander,
+            "Instander - Clone": instander_clone,
+            "Instander - Unclone": instander_unclone,
+            "MyInsta - Clone": myinsta_clone,
+            "MyInsta - Unclone": myinsta_unclone,
             "Honinsta": honinsta,
-            "MyInsta": myinsta,
         },
     )
     app.update()
@@ -472,23 +486,6 @@ def neverhaveiever():
         return Liteapks("never-have-i-ever-194362")()
 
     app = AppBase("Never Have I Ever", {"LITEAPKS": liteapks})
-    app.update()
-
-
-#####################################################################################
-# LAWNCHAIR
-def lawnchair():
-
-    # LawnchairLauncher
-    def lawnchairlauncher():
-        return Github("LawnchairLauncher", "lawnchair")(["Lawnchair", ".apk"])
-
-    def gooogler():
-        return Github("Goooler", "LawnchairRelease")(["Lawnchair", ".apk"])
-
-    app = AppBase(
-        "Lawnchair", {"LawnchairLauncher": lawnchairlauncher, "Goooler": gooogler}
-    )
     app.update()
 
 
@@ -950,18 +947,6 @@ def truecaller():
 
 
 #####################################################################################
-# CROMITE
-def cromite():
-
-    # uazo
-    def uazo():
-        return Github("uazo", "cromite")(["arm64", "apk"], ["mapping"])
-
-    app = AppBase("Cromite", {"uazo": uazo})
-    app.update()
-
-
-#####################################################################################
 # ADOBE LIGHTROOM
 def adobelightroom():
 
@@ -980,4 +965,255 @@ def adobelightroom():
     app = AppBase(
         "Lightroom", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
     )
+    app.update()
+
+
+#####################################################################################
+# SHAZAM
+def shazam():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("shazam-2281")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("shazam-8507")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("shazam")()
+
+    app = AppBase(
+        "Shazam", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# DUOLINGO
+def duolingo():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("duolingo-2137")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("duolingo-329")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("duolingo")()
+
+    app = AppBase(
+        "Duolingo", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# MX PLAYER
+def mxplayer():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("mx-player-244401")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("mx-player-651")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("mx-player")()
+
+    app = AppBase(
+        "MX Player", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# SNOW
+def snow():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("snow-storm-superhero-93231")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("snow-32696")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("snow")()
+
+    app = AppBase(
+        "SNOW", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# SD MAID PRO
+def sdmaidpro():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("sd-maid-pro-3800")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("sd-maid-pro-527")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("sd-maid-pro-unlocked")()
+
+    app = AppBase(
+        "SD Maid Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# SD MAID SE
+def sdmaidse():
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("sd-maid-2-se-199767")()
+
+    app = AppBase("SD Maid SE", {"LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# 1DM+
+def onedm():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("1dm-1309")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("1dm-3586")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("idm-music-video-torrent-downloader")()
+
+    app = AppBase(
+        "1DM+", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# MY DIARY
+def mydiary():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("my-diary-16453")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("my-diary")()
+
+    app = AppBase("My Diary", {"MODYOLO": modyolo, "APKDONE": apkdone})
+    app.update()
+
+
+#####################################################################################
+# NZB360
+def nzb360():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("nzb360-55105")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("nzb360-73320")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("nzb360")()
+
+    app = AppBase(
+        "nzb360", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# BETTERNET VPN
+def betternetvpn():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("betternet-vpn-30816")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("betternet-vpn-127584")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("betternet-hotspot-vpn")()
+
+    app = AppBase(
+        "Betternet VPN", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
+    app.update()
+
+
+#####################################################################################
+# EXPRESSVPN
+def expressvpn():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("expressvpn-29068")()
+
+    app = AppBase("ExpressVPN", {"MODYOLO": modyolo})
+    app.update()
+
+
+#####################################################################################
+# NORDVPN
+def nordvpn():
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("nordvpn-127607")()
+
+    app = AppBase("NordVPN", {"LITEAPKS": liteapks})
+    app.update()
+
+
+
+#####################################################################################
+# NOVA LAUNCHER
+def novalauncher():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("nova-launcher-prime-371")()
+
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("nova-launcher-prime-79644")()
+
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("nova-launcher-prime-apk")()
+
+    app = AppBase("Nova Launcher", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone})
     app.update()

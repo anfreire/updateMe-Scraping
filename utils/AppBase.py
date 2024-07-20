@@ -16,7 +16,7 @@ class AppBase:
     def make_file_name(self, provider_title: str) -> str:
         title = self.app_title.replace(" ", "_").lower()
         provider = provider_title.replace(" ", "_").lower()
-        return f"{title}_{provider}.apk".replace("(", "").replace(")", "")
+        return f"{title}_{provider}.apk".replace("(", "").replace(")", "").replace("-", "").replace("__", "_")
 
     def download(self, provider_title: str, fun: callable) -> str | None:
         path = None

@@ -5,6 +5,8 @@ from utils.AppManager import AppManager
 from utils.newApp import NewApp
 from lib.github import Github
 from pyvirtualdisplay import Display
+import sys
+import os
 
 ###############
 GLOBAL()  #####
@@ -56,5 +58,7 @@ if __name__ == "__main__":
     if pushChanges:
         Index.write()
         Github.push_index()
+        for file in os.listdir(GLOBAL.Paths.AppsDir):
+            os.remove(os.path.join(GLOBAL.Paths.AppsDir, file))
     if display is not None:
         display.stop()

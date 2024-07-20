@@ -10,6 +10,27 @@ from typing import TypedDict, Literal, List, Tuple
 from copy import deepcopy
 import json
 import pyvirtualdisplay
+import re
+
+
+def make_fun_name(name: str) -> str:
+    name = re.sub(r"[^a-zA-Z0-9_]", "", name)
+    if name[0].isdigit():
+        DIGITS = {
+            "0": "zero",
+            "1": "one",
+            "2": "two",
+            "3": "three",
+            "4": "four",
+            "5": "five",
+            "6": "six",
+            "7": "seven",
+            "8": "eight",
+            "9": "nine",
+        }
+        name = DIGITS[name[0]] + name[1:]
+    return name.lower()
+
 
 GITHUB_PROVIDER_TYPE = TypedDict(
     "github",
@@ -149,8 +170,11 @@ class NewApp(CLI):
             results = searcher.get_results()
             for title, href in results.items():
                 name_words = [word.lower() for word in self.variables["name"].split()]
-                if all(word in title.lower() for word in name_words): 
-                    tag = searcher.get_tag(href)
+                if all(word in title.lower() for word in name_words):
+                    try:
+                        tag = searcher.get_tag(href)
+                    except Exception as e:
+                        continue
                     self.sources[provider] = href
                     break
             if not GLOBAL.Args.xhost:
@@ -180,17 +204,11 @@ class NewApp(CLI):
             self.build_provider_scrapper(
                 link,
                 [
-                    "driver = Selenium()",
-                    f'driver.get("{link}")',
-                    "wait = WebDriverWait(driver, 15)",
-                    "els = driver.find_elements(By.CSS_SELECTOR, \"a[href$='.apk']\")",
-                    "for el in els:",
-                    '    href = el.get_attribute("href")',
-                    f"    if not any(word in href for word in {list_to_str(include_words)}):",
-                    "        continue",
-                    f"    if any(word in href for word in {list_to_str(exclude_words)}):",
-                    "        continue",
-                    "    return href",
+                    "return Simple()(",
+                    f'    "{link}",',
+                    f"    include={list_to_str(include_words)},",
+                    f"    exclude={list_to_str(exclude_words)},",
+                    ")",
                 ],
             ),
         )
@@ -200,7 +218,10 @@ class NewApp(CLI):
         return (
             link,
             self.build_provider_scrapper(
-                link, [f"driver = Selenium()", f'return driver.downloadFile("{link}")']
+                link,
+                [
+                    f'return Simple()("{link}")',
+                ],
             ),
         )
 
@@ -225,7 +246,7 @@ class NewApp(CLI):
 
     def write_scrapper(self):
         os.system(
-            f'echo \'\n\n\n#####################################################################################\n# {self.variables["name"].upper()}\ndef {self.variables["name"].replace(" ", "").replace("-", "").lower()}():\n'
+            f'echo \'\n\n\n#####################################################################################\n# {self.variables["name"].upper()}\ndef {make_fun_name(self.variables["name"])}():\n'
             + self.build_provider_scrappers()
             + f'\n\n    app = AppBase("{self.variables["name"]}", '
             + "{"
