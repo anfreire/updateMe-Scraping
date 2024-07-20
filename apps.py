@@ -1068,12 +1068,8 @@ def sdmaidpro():
     def liteapks():
         return Liteapks("sd-maid-pro-527")()
 
-    # APKDONE
-    def apkdone():
-        return ApkDone("sd-maid-pro-unlocked")()
-
     app = AppBase(
-        "SD Maid Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+        "SD Maid Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks}
     )
     app.update()
 
@@ -1196,7 +1192,6 @@ def nordvpn():
     app.update()
 
 
-
 #####################################################################################
 # NOVA LAUNCHER
 def novalauncher():
@@ -1205,15 +1200,15 @@ def novalauncher():
     def modyolo():
         return Modyolo("nova-launcher-prime-371")()
 
-
     # LITEAPKS
     def liteapks():
         return Liteapks("nova-launcher-prime-79644")()
-
 
     # APKDONE
     def apkdone():
         return ApkDone("nova-launcher-prime-apk")()
 
-    app = AppBase("Nova Launcher", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone})
+    app = AppBase(
+        "Nova Launcher", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+    )
     app.update()
