@@ -361,31 +361,6 @@ def instagram():
 
 
 #####################################################################################
-# TWITTER
-def twitter():
-    # AeroWitter
-    def aeroWitter():
-        driver = Aero()
-        driver.open("https://aerowitter.com/download-aero-twitter/package-2/?lang=en")
-        driver.open(
-            driver.get_href_by_text("Download Button 1 - AeroMods.app (Recommended)")
-        )
-        sleep(8)
-        driver.click_span("checkbox-custom")
-        origin = driver.get_href_by_text("Redirect Me!")
-        driver.open(origin)
-        return driver.downloadFile(driver.get_href_by_ending_link(".apk"))
-
-    app = AppBase(
-        "Twitter",
-        {
-            "AeroWitter": aeroWitter,
-        },
-    )
-    app.update()
-
-
-#####################################################################################
 # NEWPIPE
 def newpipe():
 
