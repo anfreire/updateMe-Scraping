@@ -6,6 +6,7 @@ from providers.Github import Github
 from providers.Modyolo import Modyolo, Liteapks
 from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
+from providers.Mobilism import Mobilism
 from time import sleep
 from providers.Aero import Aero
 
@@ -548,15 +549,14 @@ def linebit():
 # SOUNDCLOUD
 def soundcloud():
 
-    # # MODYOLO
-    # def modyolo():
-    #     return Modyolo("soundcloud-2329")()
+    # MODYOLO
+    def modyolo():
+        return Modyolo("soundcloud-2329")()
 
-    # # LITEAPKS
-    # def liteapks():
-    #     return Liteapks("soundcloud-119161")()
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("soundcloud-119161")()
 
-    # APKDONE
     def apkdone():
         return ApkDone("soundcloud")()
 
@@ -1043,9 +1043,7 @@ def sdmaidpro():
     def liteapks():
         return Liteapks("sd-maid-pro-527")()
 
-    app = AppBase(
-        "SD Maid Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks}
-    )
+    app = AppBase("SD Maid Pro", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
     app.update()
 
 
@@ -1122,52 +1120,6 @@ def nzb360():
 
 
 #####################################################################################
-# BETTERNET VPN
-def betternetvpn():
-
-    # MODYOLO
-    def modyolo():
-        return Modyolo("betternet-vpn-30816")()
-
-    # LITEAPKS
-    def liteapks():
-        return Liteapks("betternet-vpn-127584")()
-
-    # APKDONE
-    def apkdone():
-        return ApkDone("betternet-hotspot-vpn")()
-
-    app = AppBase(
-        "Betternet VPN", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
-    )
-    app.update()
-
-
-#####################################################################################
-# EXPRESSVPN
-def expressvpn():
-
-    # MODYOLO
-    def modyolo():
-        return Modyolo("expressvpn-29068")()
-
-    app = AppBase("ExpressVPN", {"MODYOLO": modyolo})
-    app.update()
-
-
-#####################################################################################
-# NORDVPN
-def nordvpn():
-
-    # LITEAPKS
-    def liteapks():
-        return Liteapks("nordvpn-127607")()
-
-    app = AppBase("NordVPN", {"LITEAPKS": liteapks})
-    app.update()
-
-
-#####################################################################################
 # NOVA LAUNCHER
 def novalauncher():
 
@@ -1186,4 +1138,77 @@ def novalauncher():
     app = AppBase(
         "Nova Launcher", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
     )
+    app.update()
+
+
+#####################################################################################
+# WAZE
+def waze():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("waze-41662")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("waze-navigation-live-traffic-12025")()
+
+    app = AppBase("Waze", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# VPN.LAT
+def vpnlat():
+    def derrin():
+        return Mobilism()(
+            "VPN.lat", "derrin", "VPN.lat", "derrin", exclude_words_filename=["armeabi"]
+        )
+
+    app = AppBase("VPN.lat", {"derrin": derrin})
+    app.update()
+
+
+#####################################################################################
+# MALLOC PRIVACY & SECURITY VPN
+def mallocprivacysecurityvpn():
+
+    # Balatan
+    def balatan():
+        return Mobilism()(
+            "Malloc Privacy & Security VPN",
+            "Malloc Privacy & Security VPN ",
+            "Balatan",
+            include_words_search=["premium"],
+            exclude_words_search=[],
+            include_words_filename=[],
+            exclude_words_filename=[],
+        )
+
+    app = AppBase("Malloc Privacy & Security VPN", {"Balatan": balatan})
+    app.update()
+
+
+
+#####################################################################################
+# ES FILE MANAGER
+def esfilemanager():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("esx-file-manager-explorer-71122")()
+
+    # derrin
+    def derrin():
+        return Mobilism()(
+            "ES File Manager",
+            "ES File Explorer File Manager",
+            "derrin",
+            include_words_search=['vip'],
+            exclude_words_search=[],
+            include_words_filename=[],
+            exclude_words_filename=[],
+        )
+
+    app = AppBase("ES File Manager", {"MODYOLO": modyolo, "derrin": derrin})
     app.update()

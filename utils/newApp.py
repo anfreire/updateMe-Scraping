@@ -105,7 +105,7 @@ class NewApp(CLI):
                 )
             ):
                 self.show_message(f"Icon already exists at {iconPath}", error=True)
-                continue
+                break
             response = requests.get(icon)
             if response.status_code != 200:
                 self.show_message("Invalid icon url", error=True)
@@ -213,6 +213,39 @@ class NewApp(CLI):
             ),
         )
 
+    def build_mobilism_scrapper(self) -> Tuple[str, str]:
+        search = self.input("Enter the search query: ")
+        user = self.input("Enter the user: ")
+        include_words_search = self.input(
+            "Enter the include words for search: ", multiple=True
+        )
+        exclude_words_search = self.input(
+            "Enter the exclude words for search: ", multiple=True
+        )
+        include_words_filename = self.input(
+            "Enter the include words for filename: ", multiple=True
+        )
+        exclude_words_filename = self.input(
+            "Enter the exclude words for filename: ", multiple=True
+        )
+        return (
+            user,
+            self.build_provider_scrapper(
+                user,
+                [
+                    f"return Mobilism()(",
+                    f'    "{self.variables["name"]}",',
+                    f'    "{search}",',
+                    f'    "{user}",',
+                    f"    include_words_search={list_to_str(include_words_search)},",
+                    f"    exclude_words_search={list_to_str(exclude_words_search)},",
+                    f"    include_words_filename={list_to_str(include_words_filename)},",
+                    f"    exclude_words_filename={list_to_str(exclude_words_filename)},",
+                    ")",
+                ],
+            ),
+        )
+
     def build_custom_direct_scrapper(self) -> Tuple[str, str]:
         link = self.input("Enter the link for the direct link:")
         return (
@@ -232,8 +265,11 @@ class NewApp(CLI):
             "LITEAPKS": lambda x: self.build_defined_scrapper(x),
             "APKDONE": lambda x: self.build_defined_scrapper(x),
             "ReVanced": lambda x: self.build_defined_scrapper(x),
-            "Direct Link": lambda x: self.build_custom_direct_scrapper,
-            "href finder": lambda x: self.build_custom_find_scrapper,
+            "Direct Link": lambda x: self.build_custom_direct_scrapper(),
+            "href finder": lambda x: self.build_custom_find_scrapper(),
+            "Mobilism - 1": lambda x: self.build_mobilism_scrapper(),
+            "Mobilism - 2": lambda x: self.build_mobilism_scrapper(),
+            "Mobilism - 3": lambda x: self.build_mobilism_scrapper()
         }
         providers_copy = deepcopy(self.variables["providers"])
         self.variables["providers"] = []
@@ -335,6 +371,9 @@ class NewApp(CLI):
                     "ReVanced",
                     "Direct Link",
                     "href finder",
+                    "Mobilism - 1",
+                    "Mobilism - 2",
+                    "Mobilism - 3",
                 ],
                 multiple=True,
             ),
