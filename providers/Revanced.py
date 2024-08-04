@@ -1,4 +1,4 @@
-from lib.selenium import Selenium, By
+from LIB.Selenium import Selenium, By
 
 
 class Revanced(Selenium):
@@ -8,7 +8,7 @@ class Revanced(Selenium):
 
     def __call__(self) -> str | None:
         link = self.getLink()
-        return self.downloadFile(link) if link else None
+        return self.download_file(link) if link else None
 
     def getLink(self) -> str:
         self.get(self.link)

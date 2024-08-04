@@ -1,4 +1,4 @@
-from lib.selenium import Selenium, By, WebDriverWait, EC
+from LIB.Selenium import Selenium, By, WebDriverWait, EC
 from typing import List
 
 
@@ -13,7 +13,7 @@ class Simple(Selenium):
         exclude: List[str] = [],
     ) -> str | None:
         link = self.getLink(link, include, exclude)
-        return self.downloadFile(link) if link else None
+        return self.download_file(link) if link else None
 
     def getLink(
         self,

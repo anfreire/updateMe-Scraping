@@ -1,6 +1,4 @@
-import time
-from lib.selenium import Selenium, By
-from time import sleep
+from LIB.Selenium import Selenium, By
 from typing import TypedDict
 import datetime
 
@@ -20,7 +18,7 @@ class ApkDone(Selenium):
 
     def __call__(self) -> str | None:
         link = self.getLink()
-        return self.downloadFile(link) if link else None
+        return self.download_file(link) if link else None
 
     def getLink(self):
         self.get(self.link)

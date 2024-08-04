@@ -81,3 +81,15 @@ class Index:
 
     def __setitem__(self, key: str, value: IndexApp) -> None:
         self.index[key] = value
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.index
+
+    def keys(self):
+        return self.index.keys()
+
+    def values(self):
+        return self.index.values()
+
+    def items(self):
+        return self.index.items()

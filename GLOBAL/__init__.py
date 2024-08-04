@@ -13,6 +13,7 @@ class Global:
         self.Log = Log(self.Paths.Files.Log, self.Args.debug)
         self.Config = Config(self.Paths.Files.Config)
         self.VirusTotal = VirusTotal(self.Config["VirusTotal"]["API_KEY"], self.Log)
+        self.Index = Index(self.Paths.Files.Index)
         self.Log("Global instance created")
         self.Log(f"Args: {self.Args.__dict__}")
 

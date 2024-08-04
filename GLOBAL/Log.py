@@ -34,9 +34,10 @@ class Log:
     def log(
         self, message: str, level: LogLevel = LogLevel.INFO, exception: bool = False
     ):
-        log_method = getattr(self.logger, level.value.lower())
+        level = level.value if isinstance(level, LogLevel) else level
+        log_method = getattr(self.logger, level.lower())
         log_method(message, exc_info=exception, stack_info=exception)
-        print(f"[ {level.value} ]\n{message}\n")
+        print(f"[ {level} ]\n{message}\n")
 
     def __call__(
         self, message: str, level: LogLevel = LogLevel.INFO, exception: bool = False

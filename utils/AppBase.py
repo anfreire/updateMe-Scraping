@@ -1,11 +1,9 @@
 from typing import Dict
 import os
-from lib.github import Github
-from lib.apk import Apk
-from lib.app import App
-from lib.virustotal import VirusTotal
+from LIB.Github import Github
+from LIB.Apk import Apk
+from LIB.App import App
 from GLOBAL import GLOBAL
-from utils.Index import Index
 
 
 class AppBase:
@@ -36,7 +34,7 @@ class AppBase:
 
     def move_file(self, path: str, provider_title: str) -> str:
         newFileName = os.path.join(
-            GLOBAL.Paths.AppsDir, App.filter_name(provider_title)
+            GLOBAL.Paths.Directories.Apps, App.filter_name(provider_title)
         )
         if os.path.exists(newFileName):
             os.remove(newFileName)
@@ -55,7 +53,7 @@ class AppBase:
             return None
 
     def process(self, provider_title: str, apk: Apk, path: str) -> None:
-        oldProvider = Index.index[self.app_title]["providers"][provider_title]
+        oldProvider = GLOBAL.Index[self.app_title]["providers"][provider_title]
         if apk.packageName != oldProvider["packageName"]:
             GLOBAL.Log(
                 f"{self.app_title} - {provider_title} has different package name. Expected: {oldProvider['packageName']}, got: {apk.packageName}",
@@ -63,28 +61,28 @@ class AppBase:
             )
         forced = GLOBAL.Args.virustotal or GLOBAL.Args.github
         if GLOBAL.Args.virustotal:
-            previous = VirusTotal.check_previous_submissions(path, apk.sha256)
+            previous = GLOBAL.VirusTotal.check_previous_submissions(path, apk.sha256)
             if previous is None:
-                VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
+                GLOBAL.VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
             else:
                 if previous:
                     GLOBAL.Log(
                         f"{self.app_title} - {provider_title} is infected",
                         level="CRITICAL",
                     )
-                    Index.index[self.app_title]["providers"][provider_title][
+                    GLOBAL.Index[self.app_title]["providers"][provider_title][
                         "safe"
                     ] = False
-                    Index.write()
+                    GLOBAL.Index.write()
                 else:
                     GLOBAL.Log(
                         f"{self.app_title} - {provider_title} is safe",
                         level="INFO",
                     )
-                    Index.index[self.app_title]["providers"][provider_title][
+                    GLOBAL.Index[self.app_title]["providers"][provider_title][
                         "safe"
                     ] = True
-                    Index.write()
+                    GLOBAL.Index.write()
         if GLOBAL.Args.github:
             download = Github.push_release(path)
 
@@ -96,19 +94,19 @@ class AppBase:
             return
 
         if not forced and not GLOBAL.Args.virustotal:
-            VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
+            GLOBAL.VirusTotal.add(self.app_title, provider_title, path, apk.sha256)
 
         if not forced and not GLOBAL.Args.github:
             download = Github.push_release(path)
 
-        Index.index[self.app_title]["providers"][provider_title][
+        GLOBAL.Index[self.app_title]["providers"][provider_title][
             "packageName"
         ] = apk.packageName
-        Index.index[self.app_title]["providers"][provider_title]["download"] = download
-        Index.index[self.app_title]["providers"][provider_title][
+        GLOBAL.Index[self.app_title]["providers"][provider_title]["download"] = download
+        GLOBAL.Index[self.app_title]["providers"][provider_title][
             "version"
         ] = apk.version
-        Index.index[self.app_title]["providers"][provider_title]["sha256"] = apk.sha256
+        GLOBAL.Index[self.app_title]["providers"][provider_title]["sha256"] = apk.sha256
 
         if forced:
             GLOBAL.Log(
@@ -142,4 +140,4 @@ class AppBase:
                 )
                 continue
             self.process(provider_title, apk, newFileName)
-            Index.write()
+            GLOBAL.Index.write()

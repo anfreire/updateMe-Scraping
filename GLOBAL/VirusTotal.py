@@ -1,5 +1,5 @@
-import vt
 from __future__ import annotations
+import vt
 from dataclasses import dataclass
 from typing import List, Generator
 import time

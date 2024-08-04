@@ -1,5 +1,5 @@
 from typing import List
-from lib.selenium import Selenium, By
+from LIB.Selenium import Selenium, By
 
 
 class Github(Selenium):
@@ -17,7 +17,7 @@ class Github(Selenium):
         for tag in tags:
             link = self.getLinks(tag, include, exclude)
             if link:
-                return self.downloadFile(link)
+                return self.download_file(link)
         return None
 
     def getTags(self) -> List[str]:
@@ -38,7 +38,7 @@ class Github(Selenium):
         self, tag: str, include: List[str] = [], exclude: List[str] = []
     ) -> str | None:
         self.get(f"{self.prefix}/releases/expanded_assets/{tag}")
-        files = self.listDownloadableFiles()
+        files = self.list_downloadable_files()
         prefix = f"{self.prefix}/releases/download/{tag}/"
         for file in files:
             file = file.replace(prefix, "")

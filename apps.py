@@ -1,6 +1,5 @@
-from utils.Index import Index
 from utils.AppBase import AppBase
-from lib.selenium import Selenium, By, WebDriverWait
+from LIB.Selenium import Selenium, By, WebDriverWait
 from providers.Simple import Simple
 from providers.Github import Github
 from providers.Modyolo import Modyolo, Liteapks
@@ -15,7 +14,7 @@ from time import sleep
 def hdo():
     # HDO
     def HDO():
-        return Selenium().downloadFile("https://hdo.app/download")
+        return Selenium().download_file("https://hdo.app/download")
 
     app = AppBase("HDO", {"HDO": HDO})
     app.update()
@@ -301,7 +300,7 @@ def instagram():
             ):
                 link = element.get_attribute("href")
                 break
-        return driver.downloadFile(link)
+        return driver.download_file(link)
 
     def instander_unclone():
         return Simple()(
@@ -330,7 +329,7 @@ def instagram():
             ):
                 link = element.get_attribute("href")
                 break
-        return driver.downloadFile(link)
+        return driver.download_file(link)
 
     def myinsta_unclone():
         driver = Selenium()
@@ -345,7 +344,7 @@ def instagram():
             ):
                 link = element.get_attribute("href")
                 break
-        return driver.downloadFile(link)
+        return driver.download_file(link)
 
     app = AppBase(
         "Instagram",
@@ -711,7 +710,7 @@ def onstream():
     # OnStream
     def onstream():
         driver = Selenium()
-        return driver.downloadFile("https://dl.getmenow.click/onstream-latest.apk")
+        return driver.download_file("https://dl.getmenow.click/onstream-latest.apk")
 
     app = AppBase("OnStream", {"OnStream": onstream})
     app.update()

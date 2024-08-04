@@ -1,4 +1,4 @@
-from lib.selenium import Selenium, By, WebDriverWait, EC
+from LIB.Selenium import Selenium, By, WebDriverWait, EC
 from typing import Literal
 
 

@@ -1,8 +1,7 @@
-from lib.cli import CLI
-from GLOBAL import GLOBAL
-from utils.Index import Provider, Providers, App, Index
+from LIB.CLI import CLI
+from GLOBAL import GLOBAL, IndexApp, IndexProvider, IndexProviders
 from utils.searcher import Searcher
-from lib.github import Github
+from LIB.Github import Github
 import pickle
 import os
 import requests
@@ -72,31 +71,31 @@ CUSTOM_DIRECT_PROVIDER_TYPE = TypedDict(
 class NewApp(CLI):
     def __init__(self):
         super().__init__()
-        self.existing_apps = list(Index.index.keys())
+        self.existing_apps = list(GLOBAL.Index.keys())
         self.features = list(
-            {feature for app in Index.index.values() for feature in app.features}
+            {feature for app in GLOBAL.Index.values() for feature in app.features}
         )
         self._variables = {}
         self.sources = {}
         self.__restore_config()
 
     def __restore_config(self):
-        if not os.path.exists(GLOBAL.Paths.NewAppBackupFile):
+        if not os.path.exists(GLOBAL.Paths.Files.NewAppBackup):
             return
         if self.message(
             "Do you want to restore the backup of a new app creation?", prompt=True
         ):
             return
-        with open(GLOBAL.Paths.NewAppBackupFile, "rb") as file:
+        with open(GLOBAL.Paths.Files.NewAppBackup, "rb") as file:
             self._variables = pickle.load(file)
 
     def __save_config(self):
-        with open(GLOBAL.Paths.NewAppBackupFile, "wb") as file:
+        with open(GLOBAL.Paths.Files.NewAppBackup, "wb") as file:
             pickle.dump(self.variables, file)
 
     def __remove_config(self):
-        if os.path.exists(GLOBAL.Paths.NewAppBackupFile):
-            os.remove(GLOBAL.Paths.NewAppBackupFile)
+        if os.path.exists(GLOBAL.Paths.Files.NewAppBackup):
+            os.remove(GLOBAL.Paths.Files.NewAppBackup)
 
     @property
     def variables(self):
@@ -177,7 +176,7 @@ class NewApp(CLI):
         exclude_words = self.input("Unkown Provider Search Words", multiple=True)
         return (
             link,
-            self.build_provider_scrapper(
+            self.__build_provider_fun(
                 link,
                 [
                     "return Simple()(",
@@ -276,7 +275,7 @@ class NewApp(CLI):
                 continue
             if os.path.exists(
                 iconPath := os.path.join(
-                    GLOBAL.Paths.IconsDir,
+                    GLOBAL.Paths.Directories.Icons,
                     re.sub(r"[^a-zA-Z0-9_]", "", self.variables["name"]) + ".png",
                 )
             ):
@@ -348,7 +347,7 @@ class NewApp(CLI):
                 ]
             )
             + "})\n"
-            + f"    app.update()' >> {GLOBAL.Paths.AppsScriptFile}"
+            + f"    app.update()' >> {GLOBAL.Paths.Files.AppsScript}"
         )
 
     def add_index(self):
@@ -365,7 +364,7 @@ class NewApp(CLI):
                 "safe": True,
                 "sha256": "",
             }
-        Index.index[self.variables["name"]] = App(
+        GLOBAL.Index[self.variables["name"]] = IndexApp(
             {
                 "icon": self.variables["icon"],
                 "depends": self.variables["dependencies"],
@@ -374,11 +373,11 @@ class NewApp(CLI):
                 "providers": providers,
             }
         )
-        Index.write()
+        GLOBAL.Index.write()
 
     def add_category(self):
         categories = {}
-        with open(GLOBAL.Paths.CategoriesFile, "r") as file:
+        with open(GLOBAL.Paths.Files.Categories, "r") as file:
             categories = json.load(file)
         category = self.select("App Category", list(categories.keys()))
         if category is None:
@@ -392,7 +391,7 @@ class NewApp(CLI):
                 break
         else:
             categories[category]["apps"].append(self.variables["name"])
-        with open(GLOBAL.Paths.CategoriesFile, "w") as file:
+        with open(GLOBAL.Paths.Files.Categories, "w") as file:
             json.dump(categories, file, indent=4)
         Github.push_categories()
 

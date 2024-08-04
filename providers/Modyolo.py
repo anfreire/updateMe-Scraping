@@ -1,4 +1,4 @@
-from lib.selenium import Selenium, WebDriverWait, By, EC
+from LIB.Selenium import Selenium, WebDriverWait, By, EC
 from GLOBAL import GLOBAL
 
 
@@ -9,7 +9,7 @@ class Base(Selenium):
 
     def __call__(self) -> str | None:
         link = self.getLink()
-        return self.downloadFile(link) if link else None
+        return self.download_file(link) if link else None
 
     def getLink(self, el: bool = False) -> str:
         self.get(self.link)
@@ -43,5 +43,5 @@ class Liteapks(Base):
         )
         if not el or not el.get_attribute("href"):
             return None
-        fun = lambda: self.clickJS(el)
-        return self.monitorDownloads(fun)
+        fun = lambda: self.click_js(el)
+        return self.monitor_downloads(fun)

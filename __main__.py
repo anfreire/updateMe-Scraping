@@ -1,17 +1,8 @@
 from GLOBAL import GLOBAL
-from lib.virustotal import VirusTotal
-from utils.Index import Index
-from utils.AppManager import AppManager
 from utils.newApp import NewApp
-from lib.github import Github
+from LIB.Github import Github
 from pyvirtualdisplay import Display
 import os
-
-###############
-GLOBAL()  #####
-VirusTotal()  #
-Index()  ######
-###############
 import inspect
 import apps
 
@@ -47,15 +38,15 @@ if __name__ == "__main__":
         else:
             for app in funs:
                 funs[app]()
-        for analysis in VirusTotal.wait_queue():
+        for analysis in GLOBAL.VirusTotal.wait_queue():
             if analysis.infected:
-                Index.index[analysis.appname]["providers"][analysis.provider][
+                GLOBAL.Index[analysis.appname]["providers"][analysis.provider][
                     "safe"
                 ] = False
-                Index.write()
+                GLOBAL.Index.write()
 
     if pushChanges:
-        Index.write()
+        GLOBAL.Index.write()
         Github.push_index()
         for file in os.listdir(GLOBAL.Paths.AppsDir):
             os.remove(os.path.join(GLOBAL.Paths.AppsDir, file))
