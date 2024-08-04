@@ -2,22 +2,20 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from GLOBAL import GLOBAL
 import os
 from typing import List
 import time
-os.environ['WDM_LOG'] = '0'
 
+os.environ["WDM_LOG"] = "0"
 
 
 class Selenium(WebDriver):
     def __init__(self) -> None:
         self.cleanOldSession()
         super().__init__(
-            service=Service(executable_path='/usr/bin/chromedriver'), # '/usr/bin/chromedriver
+            service=Service(executable_path="/usr/bin/chromedriver"),
             options=self.getOptions(),
         )
 
@@ -37,7 +35,9 @@ class Selenium(WebDriver):
         options.enable_downloads = True
         options.add_argument(f"--load-extension={extensionFolder}")
         options.add_argument("--enable-managed-downloads")
-        options.add_argument(f"user-data-dir={os.path.expanduser('~')}/.config/chromium")
+        options.add_argument(
+            f"user-data-dir={os.path.expanduser('~')}/.config/chromium"
+        )
         options.add_argument(f"--profile-directory=Profile 1")
         options.add_experimental_option(
             "prefs",
@@ -55,9 +55,14 @@ class Selenium(WebDriver):
     def clickJS(self, element: WebElement) -> None:
         self.execute_script("arguments[0].click();", element)
 
-    def listDownloadableFiles(self, fileExtension: str = '.apk') -> List[str]:
-        return [a.get_attribute("href") for a in self.find_elements(By.TAG_NAME, "a") if a.get_attribute("href") and a.get_attribute("href").endswith(fileExtension)]
-    
+    def listDownloadableFiles(self, fileExtension: str = ".apk") -> List[str]:
+        return [
+            a.get_attribute("href")
+            for a in self.find_elements(By.TAG_NAME, "a")
+            if a.get_attribute("href")
+            and a.get_attribute("href").endswith(fileExtension)
+        ]
+
     def monitorDownloads(self, fun: callable, timeout: int = 150) -> str:
         downloadsDir = os.path.join(os.path.expanduser("~"), "Downloads")
         for file in os.listdir(downloadsDir):
@@ -69,7 +74,11 @@ class Selenium(WebDriver):
         fun()
         tries = 0
         while tries < timeout:
-            diff = [file for file in list(set(os.listdir(downloadsDir)) - set(downloadedFiles)) if file.endswith(".apk")]
+            diff = [
+                file
+                for file in list(set(os.listdir(downloadsDir)) - set(downloadedFiles))
+                if file.endswith(".apk")
+            ]
             if diff:
                 break
             time.sleep(1)

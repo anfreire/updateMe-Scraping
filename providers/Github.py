@@ -1,6 +1,5 @@
 from typing import List
-import re
-from lib.selenium import Selenium, By, WebDriverWait, EC
+from lib.selenium import Selenium, By
 
 
 class Github(Selenium):

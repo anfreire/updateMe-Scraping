@@ -3,10 +3,11 @@ import datetime
 import subprocess
 from GLOBAL import GLOBAL
 
+
 class Github:
 
-    @classmethod
-    def push_release(cls, path: str) -> str:
+    @staticmethod
+    def push_release(path: str) -> str:
         filename = path.split("/")[-1]
         delete_result = subprocess.run(
             f"cd {GLOBAL.Paths.AppsDir} && gh release delete-asset apps {filename} -y",
@@ -25,13 +26,16 @@ class Github:
             stderr=subprocess.PIPE,
         )
         if upload_result.returncode != 0:
-            GLOBAL.Log(f"Error uploading {filename} to release. {upload_result.stderr.decode()}", level="CRITICAL")
+            GLOBAL.Log(
+                f"Error uploading {filename} to release. {upload_result.stderr.decode()}",
+                level="CRITICAL",
+            )
         else:
             GLOBAL.Log(f"Uploaded {filename} to release", level="INFO")
         return f"https://github.com/anfreire/UpdateMe-Data/releases/download/apps/{filename}"
 
-    @classmethod
-    def push_index(cls, message: str = "") -> None:
+    @staticmethod
+    def push_index(message: str = "") -> None:
         message = (
             "[ "
             + datetime.datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
@@ -43,8 +47,8 @@ class Github:
         )
         GLOBAL.Log(f"Pushed index.json to Github", level="INFO")
 
-    @classmethod
-    def push_icon(cls, path: str) -> str:
+    @staticmethod
+    def push_icon(path: str) -> str:
         filename = path.split("/")[-1]
         push_result = subprocess.run(
             f"cd {GLOBAL.Paths.IconsDir} && git add {filename} && git commit -m '{filename}' && git push -f",
@@ -53,13 +57,16 @@ class Github:
             stderr=subprocess.PIPE,
         )
         if push_result.returncode != 0:
-            GLOBAL.Log(f"Error pushing {filename}. {push_result.stderr.decode()}", level="CRITICAL")
+            GLOBAL.Log(
+                f"Error pushing {filename}. {push_result.stderr.decode()}",
+                level="CRITICAL",
+            )
         else:
             GLOBAL.Log(f"Pushed {filename} to Github", level="INFO")
         return f"https://raw.githubusercontent.com/anfreire/updateMe-Data/main/icons/{filename}"
-    
-    @classmethod
-    def push_categories(self) -> None:
+
+    @staticmethod
+    def push_categories() -> None:
         os.system(
             f"cd {GLOBAL.Paths.DataDir} && git add categories.json && git commit -m 'categories.json' && git push -f"
         )

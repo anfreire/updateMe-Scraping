@@ -1,8 +1,4 @@
 from lib.selenium import Selenium, By
-from providers.Github import Github
-from typing import List
-import re
-import time
 
 
 class Revanced(Selenium):

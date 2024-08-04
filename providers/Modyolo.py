@@ -1,6 +1,6 @@
 from lib.selenium import Selenium, WebDriverWait, By, EC
-from time import sleep
 from GLOBAL import GLOBAL
+
 
 class Base(Selenium):
     def __init__(self, link: str):
@@ -34,7 +34,7 @@ class Modyolo(Base):
 class Liteapks(Base):
     def __init__(self, tag: str):
         super().__init__(f"https://liteapks.com/download/{tag}/1")
-    
+
     def __call__(self) -> str | None:
         self.get(self.link)
         wait = WebDriverWait(self, 10)
@@ -44,4 +44,4 @@ class Liteapks(Base):
         if not el or not el.get_attribute("href"):
             return None
         fun = lambda: self.clickJS(el)
-        return self.monitorDownloads(fun) 
+        return self.monitorDownloads(fun)

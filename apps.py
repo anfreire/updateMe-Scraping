@@ -8,7 +8,6 @@ from providers.Apkdone import ApkDone
 from providers.Revanced import Revanced
 from providers.Mobilism import Mobilism
 from time import sleep
-from providers.Aero import Aero
 
 
 #####################################################################################

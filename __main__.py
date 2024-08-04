@@ -5,7 +5,6 @@ from utils.AppManager import AppManager
 from utils.newApp import NewApp
 from lib.github import Github
 from pyvirtualdisplay import Display
-import sys
 import os
 
 ###############
