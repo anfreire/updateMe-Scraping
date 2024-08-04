@@ -22,10 +22,10 @@ class IndexProvider:
 @dataclass
 class IndexApp:
     icon: str
-    providers: dict[str, IndexProvider] = field(default_factory=dict)
     depends: list = field(default_factory=list)
     complements: list = field(default_factory=list)
     features: list = field(default_factory=list)
+    providers: dict[str, IndexProvider] = field(default_factory=dict)
 
     def __getitem__(self, key: str) -> Any:
         return getattr(self, key)
@@ -39,10 +39,6 @@ class Index:
         self.index_file = index_file
         self.index: Dict[str, IndexApp] = {}
         self.read()
-        with open(
-            "/home/anfreire/Documents/UpdateMe/Scrapping/index.json", "w"
-        ) as index_file:
-            json.dump(self.to_dict(), index_file, indent=4)
 
     def to_dict(self) -> dict:
         return {app: asdict(self.index[app]) for app in self.index}
