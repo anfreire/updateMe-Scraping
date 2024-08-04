@@ -66,11 +66,6 @@ class Selenium(WebDriver):
 
     def monitor_downloads(self, fun: callable, timeout: int = 150) -> str:
         downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
-        for file in os.listdir(downloads_dir):
-            try:
-                os.remove(os.path.join(downloads_dir, file))
-            except:
-                pass
         downloaded_files = os.listdir(downloads_dir)
         fun()
         tries = 0

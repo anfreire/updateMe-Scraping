@@ -43,7 +43,7 @@ class Github:
             + message
         )
         os.system(
-            f"cd {GLOBAL.Paths.Directories.Apps} && git add index.json && git commit -m '{message}' && git push -f"
+            f"cd {GLOBAL.Paths.Directories.Data} && git add index.json && git commit -m '{message}' && git push -f"
         )
         GLOBAL.Log(f"Pushed index.json to Github")
 

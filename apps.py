@@ -1,12 +1,12 @@
-from utils.AppBase import AppBase
+from LIB.AppBase import AppBase
 from LIB.Selenium import Selenium, By, WebDriverWait
-from providers.Simple import Simple
-from providers.Github import Github
-from providers.Modyolo import Modyolo, Liteapks
-from providers.Apkdone import ApkDone
-from providers.Revanced import Revanced
-from providers.Mobilism import Mobilism
-from time import sleep
+from Providers.Simple import Simple
+from Providers.Github import Github
+from Providers.Modyolo import Modyolo
+from Providers.Liteapks import Liteapks
+from Providers.Apkdone import ApkDone
+from Providers.Revanced import Revanced
+from Providers.Mobilism import Mobilism
 
 
 #####################################################################################
@@ -1193,7 +1193,7 @@ def esfilemanager():
 
     # MODYOLO
     def modyolo():
-        return Modyolo("esx-file-manager-explorer-71122")()
+        return Modyolo("es-file-explorer-19868")()
 
     def liteapks():
         return Liteapks("es-file-explorer-3661")()
@@ -1205,4 +1205,49 @@ def esfilemanager():
         "ES File Explorer",
         {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone},
     )
+    app.update()
+
+
+#####################################################################################
+# FRIENDLY FOR TWITTER/X
+def friendlyfortwitterx():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("friendly-for-twitter-67653")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("friendly-for-twitter-76209")()
+
+    # # Balatan
+    # def balatan():
+    #     return Mobilism()(
+    #         "Friendly For Twitter/X",
+    #         "Friendly For Twitter/X",
+    #         "Balatan",
+    #         include_words_search=[],
+    #         exclude_words_search=[],
+    #         include_words_filename=[],
+    #         exclude_words_filename=[],
+    #     )
+
+    app = AppBase("Friendly For Twitter/X", {"MODYOLO": modyolo, "LITEAPKS": liteapks})
+    app.update()
+
+
+#####################################################################################
+# SNAPCHAT
+def snapchat():
+
+    # FouadMODS
+    def foud():
+        return Simple()(
+            "https://fmmods.com/fouad-snapchat/",
+            include=["FouadMODS", "FMSC"],
+            exclude=[],
+        )
+
+
+    app = AppBase("Snapchat", {"FouadMODS": foud})
     app.update()

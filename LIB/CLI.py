@@ -418,22 +418,21 @@ Press a key to see the output...
     def form(self, title: str, props: dict[str, str | None]) -> dict[str, str]:
         selected = list(props.keys())[0]
         value_index = len(props[selected])
-        props_copy = deepcopy(props)
         while True:
             try:
                 self.__hide_cursor()
                 self.__clear()
                 self.__print_header(title)
-                self.__print_form(props_copy, value_index, selected)
+                self.__print_form(props, value_index, selected)
                 self.__print_shortcuts(
                     [Shortcuts.EXIT, Shortcuts.PASTE, Shortcuts.SAVE]
                 )
-                props_copy, value_index, selected = self.__input_form(
-                    props_copy, value_index, selected
+                props, value_index, selected = self.__input_form(
+                    props, value_index, selected
                 )
             except (Signals.Saved, Signals.Exited) as e:
-                if type(e) == Signals.Saved:
-                    return props_copy
+                if type(e) == Signals.Exited:
+                    return None
                 return props
 
     ############################################################################
@@ -445,16 +444,24 @@ Press a key to see the output...
         index: int,
         suggested: str | None,
     ) -> None:
-        to_print = value
-        if suggested:
-            to_print += self.term.snow4(suggested[len(value) :])
-        if index == len(value):
-            to_print += " "
-        to_print = (
-            to_print[:index]
-            + self.term.on_skyblue3(to_print[index])
-            + to_print[index + 1 :]
-        )
+        value
+
+        if suggested and len(suggested) > len(value):
+            to_suggest = suggested[len(value) :]
+            to_print = (
+                value
+                + self.term.on_skyblue3(to_suggest[0])
+                + self.term.gray50(to_suggest[1:])
+            )
+        else:
+            if index >= len(value):
+                to_print = value + self.term.on_skyblue3(" ")
+            else:
+                to_print = (
+                    value[:index]
+                    + self.term.on_skyblue3(value[index])
+                    + value[index + 1 :]
+                )
         self.__print(to_print + "\n\n")
 
     def __print_input_inputed(self, inputed: list[str]) -> None:
@@ -494,38 +501,6 @@ Press a key to see the output...
                         index = max(0, index - 1)
                     case 261:  # Right
                         index = min(len(value), index + 1)
-                    case 259:  # Up
-                        if len(autocomplete):
-                            suggestions = [
-                                word
-                                for word in autocomplete
-                                if word.lower().startswith(value.lower())
-                            ]
-                            if len(suggestions) == 0:
-                                suggested = None
-                            if suggested is None:
-                                suggested = suggestions[0]
-                            else:
-                                index = (suggestions.index(suggested) - 1) % len(
-                                    suggestions
-                                )
-                                suggested = suggestions[index]
-                    case 258:  # Down
-                        if len(autocomplete):
-                            suggestions = [
-                                word
-                                for word in autocomplete
-                                if word.lower().startswith(value.lower())
-                            ]
-                            if len(suggestions) == 0:
-                                suggested = None
-                            if suggested is None:
-                                suggested = suggestions[0]
-                            else:
-                                index = (suggestions.index(suggested) + 1) % len(
-                                    suggestions
-                                )
-                                suggested = suggestions[index]
                     case 512:  # TAB
                         if suggested:
                             value = suggested
@@ -549,6 +524,17 @@ Press a key to see the output...
                             new_value = old_value[:index] + val + old_value[index:]
                             value = new_value
                             index += 1
+
+                if len(autocomplete):
+                    suggestions = [
+                        word
+                        for word in autocomplete
+                        if word.lower().startswith(value.lower())
+                    ]
+                    if len(suggestions) == 0:
+                        suggested = None
+                    else:
+                        suggested = suggestions[0]
 
                 return value, index, suggested, inputed
         except KeyboardInterrupt:
