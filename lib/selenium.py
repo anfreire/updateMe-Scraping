@@ -13,27 +13,27 @@ os.environ["WDM_LOG"] = "0"
 
 class Selenium(WebDriver):
     def __init__(self) -> None:
-        self.cleanOldSession()
+        self.clean_old_session()
         super().__init__(
             service=Service(executable_path="/usr/bin/chromedriver"),
-            options=self.getOptions(),
+            options=self.get_options(),
         )
 
-    def cleanOldSession(self) -> None:
+    def clean_old_session(self) -> None:
         os.system("pkill -f chromium")
         os.system("rm -rf /home/anfreire/.config/chromium/Singleton*")
 
-    def getExtensionFolder(self) -> str:
+    def get_extension_folder(self) -> str:
         folder = r"/home/anfreire/.config/chromium/Profile 1/Extensions"
-        availableFolder = os.listdir(folder)
-        availableSubFolder = os.listdir(os.path.join(folder, availableFolder[0]))
-        return os.path.join(folder, availableFolder[0], availableSubFolder[0])
+        available_folder = os.listdir(folder)
+        available_sub_folder = os.listdir(os.path.join(folder, available_folder[0]))
+        return os.path.join(folder, available_folder[0], available_sub_folder[0])
 
-    def getOptions(self) -> Options:
-        extensionFolder = self.getExtensionFolder()
+    def get_options(self) -> Options:
+        extension_folder = self.get_extension_folder()
         options = Options()
         options.enable_downloads = True
-        options.add_argument(f"--load-extension={extensionFolder}")
+        options.add_argument(f"--load-extension={extension_folder}")
         options.add_argument("--enable-managed-downloads")
         options.add_argument(
             f"user-data-dir={os.path.expanduser('~')}/.config/chromium"
@@ -52,31 +52,31 @@ class Selenium(WebDriver):
         )
         return options
 
-    def clickJS(self, element: WebElement) -> None:
+    def click_js(self, element: WebElement) -> None:
         self.execute_script("arguments[0].click();", element)
 
-    def listDownloadableFiles(self, fileExtension: str = ".apk") -> List[str]:
+    def list_downloadable_files(self, file_extension: str = ".apk") -> List[str]:
         return [
             a.get_attribute("href")
             for a in self.find_elements(By.TAG_NAME, "a")
             if a.get_attribute("href")
-            and a.get_attribute("href").endswith(fileExtension)
+            and a.get_attribute("href").endswith(file_extension)
         ]
 
-    def monitorDownloads(self, fun: callable, timeout: int = 150) -> str:
-        downloadsDir = os.path.join(os.path.expanduser("~"), "Downloads")
-        for file in os.listdir(downloadsDir):
+    def monitor_downloads(self, fun: callable, timeout: int = 150) -> str:
+        downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
+        for file in os.listdir(downloads_dir):
             try:
-                os.remove(os.path.join(downloadsDir, file))
+                os.remove(os.path.join(downloads_dir, file))
             except:
                 pass
-        downloadedFiles = os.listdir(downloadsDir)
+        downloaded_files = os.listdir(downloads_dir)
         fun()
         tries = 0
         while tries < timeout:
             diff = [
                 file
-                for file in list(set(os.listdir(downloadsDir)) - set(downloadedFiles))
+                for file in list(set(os.listdir(downloads_dir)) - set(downloaded_files))
                 if file.endswith(".apk")
             ]
             if diff:
@@ -85,8 +85,8 @@ class Selenium(WebDriver):
             tries += 1
         if len(diff) == 0:
             raise Exception(f"Timeout reached, file not downloaded")
-        return os.path.join(downloadsDir, diff[0])
+        return os.path.join(downloads_dir, diff[0])
 
-    def downloadFile(self, download_link: str, timeout: int = 150) -> str:
+    def download_file(self, download_link: str, timeout: int = 150) -> str:
         fun = lambda: self.get(download_link)
-        return self.monitorDownloads(fun, timeout)
+        return self.monitor_downloads(fun, timeout)
