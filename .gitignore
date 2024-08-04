@@ -1,0 +1,8 @@
+.ini
+.log
+test.ipynb
+**/**/__pycache__
+providers/Mobilism.py
+new_app.pkl
+.ipynb_checkpoints
+test.py
