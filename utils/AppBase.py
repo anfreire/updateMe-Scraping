@@ -1,7 +1,8 @@
-from typing import Literal, Dict, Tuple
+from typing import Dict
 import os
 from lib.github import Github
 from lib.apk import Apk
+from lib.app import App
 from lib.virustotal import VirusTotal
 from GLOBAL import GLOBAL
 from utils.Index import Index
@@ -12,11 +13,6 @@ class AppBase:
         self.app_title = app_title
         self.providers = providers
         GLOBAL.Log(f"Starting {self.app_title}", level="INFO")
-
-    def make_file_name(self, provider_title: str) -> str:
-        title = self.app_title.replace(" ", "_").lower()
-        provider = provider_title.replace(" ", "_").lower()
-        return f"{title}_{provider}.apk".replace("(", "").replace(")", "").replace("-", "").replace("__", "_")
 
     def download(self, provider_title: str, fun: callable) -> str | None:
         path = None
@@ -40,7 +36,7 @@ class AppBase:
 
     def move_file(self, path: str, provider_title: str) -> str:
         newFileName = os.path.join(
-            GLOBAL.Paths.AppsDir, self.make_file_name(provider_title)
+            GLOBAL.Paths.AppsDir, App.filter_name(provider_title)
         )
         if os.path.exists(newFileName):
             os.remove(newFileName)

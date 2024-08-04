@@ -351,11 +351,11 @@ def instagram():
     app = AppBase(
         "Instagram",
         {
-            "Instander - Clone": instander_clone,
-            "Instander - Unclone": instander_unclone,
             "MyInsta - Clone": myinsta_clone,
             "MyInsta - Unclone": myinsta_unclone,
             "Honinsta": honinsta,
+            "Instander - Clone": instander_clone,
+            "Instander - Unclone": instander_unclone,
         },
     )
     app.update()
@@ -1015,7 +1015,7 @@ def snow():
 
     # MODYOLO
     def modyolo():
-        return Modyolo("snow-storm-superhero-93231")()
+        return Modyolo("snow-159306")()
 
     # LITEAPKS
     def liteapks():
@@ -1162,7 +1162,7 @@ def waze():
 def vpnlat():
     def derrin():
         return Mobilism()(
-            "VPN.lat", "derrin", "VPN.lat", "derrin", exclude_words_filename=["armeabi"]
+            "VPN.lat", "VPN.lat", "derrin", exclude_words_filename=["armeabi"]
         )
 
     app = AppBase("VPN.lat", {"derrin": derrin})
@@ -1189,26 +1189,22 @@ def mallocprivacysecurityvpn():
     app.update()
 
 
-
 #####################################################################################
-# ES FILE MANAGER
+# ES File Explorer
 def esfilemanager():
 
     # MODYOLO
     def modyolo():
         return Modyolo("esx-file-manager-explorer-71122")()
 
-    # derrin
-    def derrin():
-        return Mobilism()(
-            "ES File Manager",
-            "ES File Explorer File Manager",
-            "derrin",
-            include_words_search=['vip'],
-            exclude_words_search=[],
-            include_words_filename=[],
-            exclude_words_filename=[],
-        )
+    def liteapks():
+        return Liteapks("es-file-explorer-3661")()
 
-    app = AppBase("ES File Manager", {"MODYOLO": modyolo, "derrin": derrin})
+    def apkdone():
+        return ApkDone("es-file-explorer")()
+
+    app = AppBase(
+        "ES File Explorer",
+        {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone},
+    )
     app.update()

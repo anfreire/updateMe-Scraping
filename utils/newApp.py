@@ -12,6 +12,8 @@ import json
 import pyvirtualdisplay
 import re
 
+TAB = "    "
+
 
 def make_fun_name(name: str) -> str:
     name = re.sub(r"[^a-zA-Z0-9_]", "", name)
@@ -67,9 +69,6 @@ CUSTOM_DIRECT_PROVIDER_TYPE = TypedDict(
 )
 
 
-list_to_str = lambda x: str([f'"{word}"' for word in x])
-
-
 class NewApp(CLI):
     def __init__(self):
         super().__init__()
@@ -77,90 +76,65 @@ class NewApp(CLI):
         self.features = list(
             {feature for app in Index.index.values() for feature in app.features}
         )
-        self.variables = {}
+        self._variables = {}
         self.sources = {}
+        self.__restore_config()
 
-    def get_name(self):
-        name = ""
-        while True:
-            name = self.input("Enter the name of the app:", name).strip()
-            if len(name) == 0:
-                self.show_message("Name cannot be empty", error=True)
-                continue
-            if any(name == app for app in self.existing_apps):
-                self.show_message("App already exists", error=True)
-                continue
-            return name
-
-    def get_icon(self):
-        while True:
-            icon = self.input("Enter the icon of the app:").strip()
-            if len(icon) == 0:
-                self.show_message("Icon cannot be empty", error=True)
-                continue
-            if os.path.exists(
-                iconPath := os.path.join(
-                    GLOBAL.Paths.IconsDir,
-                    self.variables["name"].replace(" ", "_").lower() + ".png",
-                )
-            ):
-                self.show_message(f"Icon already exists at {iconPath}", error=True)
-                break
-            response = requests.get(icon)
-            if response.status_code != 200:
-                self.show_message("Invalid icon url", error=True)
-                continue
-            with open(iconPath, "wb") as file:
-                file.write(response.content)
-            return Github.push_icon(iconPath)
-
-    def restore_config(self):
+    def __restore_config(self):
         if not os.path.exists(GLOBAL.Paths.NewAppBackupFile):
             return
-        if (
-            self.select(
-                "Do you want to restore the backup of a new app creation?",
-                ["Yes", "No"],
-            )
-            == "No"
+        if self.message(
+            "Do you want to restore the backup of a new app creation?", prompt=True
         ):
             return
         with open(GLOBAL.Paths.NewAppBackupFile, "rb") as file:
-            self.variables = pickle.load(file)
+            self._variables = pickle.load(file)
 
-    def save_config(self):
+    def __save_config(self):
         with open(GLOBAL.Paths.NewAppBackupFile, "wb") as file:
             pickle.dump(self.variables, file)
 
-    def remove_config(self):
+    def __remove_config(self):
         if os.path.exists(GLOBAL.Paths.NewAppBackupFile):
             os.remove(GLOBAL.Paths.NewAppBackupFile)
 
-    def build_provider_scrapper(self, provider: str, lines: List[str]) -> str:
+    @property
+    def variables(self):
+        return self._variables
+
+    @variables.setter
+    def variables(self, value):
+        self._variables = value
+        self.__save_config()
+
+    def __build_provider_fun(self, provider: str, lines: List[str]) -> str:
         return (
             f'\n    # {provider}\n    def {provider.replace(" ", "").lower()}():\n        '
             + "\n        ".join(lines)
         )
 
-    def build_github_scrapper(self) -> Tuple[str, str]:
-        user = self.input("Enter the github user:")
-        repo = self.input("Enter the github repo:")
-        include_words = self.input("Enter the include words", multiple=True)
-        exclude_words = self.input("Enter the exclude words", multiple=True)
+    def __build_github_scrapper(self) -> Tuple[str, str]:
+        user = self.input("Github User")
+        repo = self.input("Github Repo")
+        include_words: list[str] = self.input(
+            "Github Include Search Words", multiple=True
+        )
+        exclude_words = self.input("Github Exclude Search Words", multiple=True)
         self.sources["Github"] = f"https://github.com/{user}/{repo}"
         return (
             user,
-            self.build_provider_scrapper(
+            self.__build_provider_fun(
                 user,
                 [
-                    f'return Github("{user}", "{repo}")({list_to_str(include_words)}, {list_to_str(exclude_words)})',
+                    f'return Github("{user}", "{repo}")({repr(include_words)}, {repr(exclude_words)})',
                 ],
             ),
         )
 
-    def build_defined_scrapper(self, provider: str) -> Tuple[str, str]:
+    def __build_defined_scrapper(self, provider: str) -> Tuple[str, str]:
+        tag = None
         if provider == "ReVanced":
-            tag = self.input(f"Enter the tag for {provider}:")
+            tag = self.input(f"{provider} Tag")
         else:
             if not GLOBAL.Args.xhost:
                 display = pyvirtualdisplay.Display(visible=0, size=(800, 600))
@@ -179,8 +153,8 @@ class NewApp(CLI):
                     break
             if not GLOBAL.Args.xhost:
                 display.stop()
-            if "tag" not in locals():
-                tag = self.input(f"Enter the tag for {provider}:")
+            if not tag:
+                tag = self.input(f"{provider} Tag")
         match provider:
             case "MODYOLO":
                 class_name = "Modyolo"
@@ -192,13 +166,15 @@ class NewApp(CLI):
                 class_name = "Revanced"
         return (
             provider,
-            self.build_provider_scrapper(provider, [f'return {class_name}("{tag}")()']),
+            self.__build_provider_fun(provider, [f'return {class_name}("{tag}")()']),
         )
 
-    def build_custom_find_scrapper(self) -> Tuple[str, str]:
-        link = self.input("Enter the link for the href finder:")
-        include_words = self.input("Enter the include words:", multiple=True)
-        exclude_words = self.input("Enter the exclude words:", multiple=True)
+    def __build_unkown_scrapper(self) -> Tuple[str, str]:
+        link = self.input("Unkown Link")
+        include_words = self.input(
+            "Unkown Provider Include Search Words", multiple=True
+        )
+        exclude_words = self.input("Unkown Provider Search Words", multiple=True)
         return (
             link,
             self.build_provider_scrapper(
@@ -206,52 +182,53 @@ class NewApp(CLI):
                 [
                     "return Simple()(",
                     f'    "{link}",',
-                    f"    include={list_to_str(include_words)},",
-                    f"    exclude={list_to_str(exclude_words)},",
+                    f"    include={repr(include_words)},",
+                    f"    exclude={repr(exclude_words)},",
                     ")",
                 ],
             ),
         )
 
-    def build_mobilism_scrapper(self) -> Tuple[str, str]:
-        search = self.input("Enter the search query: ")
-        user = self.input("Enter the user: ")
+    def __build_mobilism_scrapper(self) -> Tuple[str, str]:
+        search = self.input("Mobilism Search Query")
+        user = self.input("Mobilism Author")
         include_words_search = self.input(
-            "Enter the include words for search: ", multiple=True
+            "Mobilism Include Search Words", multiple=True
         )
         exclude_words_search = self.input(
-            "Enter the exclude words for search: ", multiple=True
+            "Mobilism Exclude Search Words", multiple=True
         )
         include_words_filename = self.input(
-            "Enter the include words for filename: ", multiple=True
+            "Mobilism Include Filename Words", multiple=True
         )
         exclude_words_filename = self.input(
-            "Enter the exclude words for filename: ", multiple=True
+            "Mobilism Exclude Filename Words", multiple=True
         )
         return (
             user,
-            self.build_provider_scrapper(
+            self.__build_provider_fun(
                 user,
                 [
                     f"return Mobilism()(",
                     f'    "{self.variables["name"]}",',
                     f'    "{search}",',
                     f'    "{user}",',
-                    f"    include_words_search={list_to_str(include_words_search)},",
-                    f"    exclude_words_search={list_to_str(exclude_words_search)},",
-                    f"    include_words_filename={list_to_str(include_words_filename)},",
-                    f"    exclude_words_filename={list_to_str(exclude_words_filename)},",
+                    f"    include_words_search={repr(include_words_search)},",
+                    f"    exclude_words_search={repr(exclude_words_search)},",
+                    f"    include_words_filename={repr(include_words_filename)},",
+                    f"    exclude_words_filename={repr(exclude_words_filename)},",
                     ")",
                 ],
             ),
         )
 
-    def build_custom_direct_scrapper(self) -> Tuple[str, str]:
-        link = self.input("Enter the link for the direct link:")
+    def __build_direct_scrapper(self) -> Tuple[str, str]:
+        name = self.input("Direct Provider Name")
+        link = self.input("Direct Provider URL")
         return (
-            link,
-            self.build_provider_scrapper(
-                link,
+            name,
+            self.__build_provider_fun(
+                name,
                 [
                     f'return Simple()("{link}")',
                 ],
@@ -260,16 +237,14 @@ class NewApp(CLI):
 
     def build_provider_scrappers(self) -> str:
         PROVIDERS_MAP = {
-            "Github": lambda x: self.build_github_scrapper(),
-            "MODYOLO": lambda x: self.build_defined_scrapper(x),
-            "LITEAPKS": lambda x: self.build_defined_scrapper(x),
-            "APKDONE": lambda x: self.build_defined_scrapper(x),
-            "ReVanced": lambda x: self.build_defined_scrapper(x),
-            "Direct Link": lambda x: self.build_custom_direct_scrapper(),
-            "href finder": lambda x: self.build_custom_find_scrapper(),
-            "Mobilism - 1": lambda x: self.build_mobilism_scrapper(),
-            "Mobilism - 2": lambda x: self.build_mobilism_scrapper(),
-            "Mobilism - 3": lambda x: self.build_mobilism_scrapper()
+            "Github": lambda x: self.__build_github_scrapper(),
+            "MODYOLO": lambda x: self.__build_defined_scrapper(x),
+            "LITEAPKS": lambda x: self.__build_defined_scrapper(x),
+            "APKDONE": lambda x: self.__build_defined_scrapper(x),
+            "ReVanced": lambda x: self.__build_defined_scrapper(x),
+            "Direct Link": lambda x: self.__build_direct_scrapper(),
+            "HREF finder": lambda x: self.__build_unkown_scrapper(),
+            "Mobilism": lambda x: self.__build_mobilism_scrapper(),
         }
         providers_copy = deepcopy(self.variables["providers"])
         self.variables["providers"] = []
@@ -279,6 +254,86 @@ class NewApp(CLI):
             self.variables["providers"].append(new_name)
             scrappers.append(scrapper)
         return "\n\n".join(scrappers)
+
+    def __get_name(self) -> None:
+        value = ""
+        while True:
+            value = self.input("App Name", value).strip()
+            if len(value) == 0:
+                self.message("Name cannot be empty", "error")
+                continue
+            if any(value == app for app in self.existing_apps):
+                self.message("App already exists", "error")
+                continue
+            self.variables["name"] = value
+            break
+
+    def __get_icon(self) -> None:
+        while True:
+            icon = self.input("App Icon URL").strip()
+            if len(icon) == 0:
+                self.message("Icon cannot be empty", "error")
+                continue
+            if os.path.exists(
+                iconPath := os.path.join(
+                    GLOBAL.Paths.IconsDir,
+                    re.sub(r"[^a-zA-Z0-9_]", "", self.variables["name"]) + ".png",
+                )
+            ):
+                if not self.message(
+                    "Icon already exists, do you want to use it?", prompt=True
+                ):
+                    if self.message(
+                        "Do you want to remove the existing icon?", prompt=True
+                    ):
+                        os.remove(iconPath)
+                    else:
+                        continue
+            else:
+                response = requests.get(icon)
+                if response.status_code != 200:
+                    self.message("Invalid icon url", "error")
+                    continue
+                with open(iconPath, "wb") as file:
+                    file.write(response.content)
+            self.variables["icon"] = iconPath
+            Github.push_icon(iconPath)
+            break
+
+    def __get_providers(self) -> None:
+        providers = {
+            "Github": 0,
+            "MODYOLO": 0,
+            "LITEAPKS": 0,
+            "APKDONE": 0,
+            "ReVanced": 0,
+            "Direct Link": 0,
+            "HREF finder": 0,
+            "Mobilism": 0,
+        }
+        while True:
+            providers = self.form("App Providers", providers)
+            for provider, value in providers.items():
+                for _ in range((int(value) if value else 0)):
+                    self.variables["providers"].append(provider)
+            if len(self.variables["providers"]) == 0:
+                self.message("At least one provider is required", "error")
+                continue
+
+    def __get_dependencies(self) -> None:
+        self.variables["dependencies"] = self.checkbox(
+            "App Dependencies", self.existing_apps
+        )
+
+    def __get_complements(self) -> None:
+        self.variables["complements"] = self.checkbox(
+            "App Complements", self.existing_apps
+        )
+
+    def __get_features(self) -> None:
+        self.variables["features"] = self.input(
+            "Enter the app features:", autocomplete=self.features, multiple=True
+        )
 
     def write_scrapper(self):
         os.system(
@@ -325,64 +380,36 @@ class NewApp(CLI):
         categories = {}
         with open(GLOBAL.Paths.CategoriesFile, "r") as file:
             categories = json.load(file)
-        if (
-            self.select(
-                "Is the category in the list? ",
-                ["Yes", "No"],
-            )
-            == "No"
-        ):
+        category = self.select("App Category", list(categories.keys()))
+        if category is None:
             while True:
-                category = self.input("Enter the category:")
+                category = self.input("App Category")
                 if category in categories.keys():
-                    self.show_message("Category already exists", error=True)
+                    self.message("Category already exists", "error")
                     break
-                icon = self.input("Enter the icon for the category:")
+                icon = self.input(f"{category} Icon")
                 categories[category] = {"apps": [self.variables["name"]], "icon": icon}
                 break
         else:
-            category = self.select("Select the category", list(categories.keys()))
             categories[category]["apps"].append(self.variables["name"])
         with open(GLOBAL.Paths.CategoriesFile, "w") as file:
             json.dump(categories, file, indent=4)
         Github.push_categories()
 
     def __call__(self):
-        self.restore_config()
         ASSIGNMENTS = {
-            "name": self.get_name,
-            "icon": self.get_icon,
-            "dependencies": lambda: self.select(
-                "Select dependencies", self.existing_apps, multiple=True
-            ),
-            "complements": lambda: self.select(
-                "Select complements", self.existing_apps, multiple=True
-            ),
-            "features": lambda: self.input(
-                "Enter the app features:", autocomplete=self.features, multiple=True
-            ),
-            "providers": lambda: self.select(
-                "Select providers",
-                [
-                    "Github",
-                    "MODYOLO",
-                    "LITEAPKS",
-                    "APKDONE",
-                    "ReVanced",
-                    "Direct Link",
-                    "href finder",
-                    "Mobilism - 1",
-                    "Mobilism - 2",
-                    "Mobilism - 3",
-                ],
-                multiple=True,
-            ),
+            "name": self.__get_name,
+            "icon": self.__get_icon,
+            "dependencies": self.__get_dependencies,
+            "complements": self.__get_complements,
+            "features": self.__get_features,
+            "providers": self.__get_providers,
         }
 
         for key, fun in ASSIGNMENTS.items():
             while self.variables.get(key) is None:
-                self.variables[key] = fun()
-                self.save_config()
+                fun()
+                self.__save_config()
 
         self.write_scrapper()
 
@@ -390,4 +417,4 @@ class NewApp(CLI):
 
         self.add_category()
 
-        self.remove_config()
+        self.__remove_config()
