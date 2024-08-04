@@ -1,5 +1,5 @@
 from LIB.CLI import CLI
-from GLOBAL import GLOBAL, IndexApp, IndexProvider, IndexProviders
+from GLOBAL import GLOBAL, IndexApp, IndexProvider
 from utils.searcher import Searcher
 from LIB.Github import Github
 import pickle

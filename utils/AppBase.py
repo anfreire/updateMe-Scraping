@@ -2,7 +2,7 @@ from typing import Dict
 import os
 from LIB.Github import Github
 from LIB.Apk import Apk
-from LIB.App import App
+from LIB.AppUtils import AppUtils
 from GLOBAL import GLOBAL
 
 
@@ -34,7 +34,7 @@ class AppBase:
 
     def move_file(self, path: str, provider_title: str) -> str:
         newFileName = os.path.join(
-            GLOBAL.Paths.Directories.Apps, App.filter_name(provider_title)
+            GLOBAL.Paths.Directories.Apps, AppUtils.filter_name(provider_title)
         )
         if os.path.exists(newFileName):
             os.remove(newFileName)

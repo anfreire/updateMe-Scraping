@@ -3,7 +3,7 @@ from GLOBAL.Args import Args
 from GLOBAL.Log import Log, LogLevel
 from GLOBAL.Config import Config
 from GLOBAL.VirusTotal import VirusTotal, VirusTotalAnalysis
-from GLOBAL.Index import Index, IndexProvider, IndexProviders, IndexApp
+from GLOBAL.Index import Index, IndexProvider, IndexApp
 
 
 class Global:

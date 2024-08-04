@@ -6,19 +6,22 @@ import os
 import inspect
 import apps
 
-funs = {
-    name: function
-    for name, function in [
-        o for o in inspect.getmembers(apps) if inspect.isfunction(o[1])
-    ]
-}
+
+def get_functions() -> dict[str, callable]:
+    return {
+        name: function
+        for name, function in [
+            o for o in inspect.getmembers(apps) if inspect.isfunction(o[1])
+        ]
+    }
+
 
 if __name__ == "__main__":
     display = None
-    pushChanges = True
+    functions = get_functions()
 
     if GLOBAL.Args.new:
-        pushChanges = NewApp()()
+        NewApp()()
 
     else:
         if not GLOBAL.Args.xhost:
@@ -27,17 +30,17 @@ if __name__ == "__main__":
         if GLOBAL.Args.app and len(GLOBAL.Args.app):
             for app in GLOBAL.Args.app:
                 app_name = app.lower()
-                if app_name in funs:
-                    funs[app_name]()
+                if app_name in functions:
+                    functions[app_name]()
                 else:
                     app_name = app_name.replace(" ", "_")
-                    if app_name in funs:
-                        funs[app_name]()
+                    if app_name in functions:
+                        functions[app_name]()
                     else:
                         GLOBAL.Log(f"App {app} not found", level="ERROR")
         else:
-            for app in funs:
-                funs[app]()
+            for app in functions:
+                functions[app]()
         for analysis in GLOBAL.VirusTotal.wait_queue():
             if analysis.infected:
                 GLOBAL.Index[analysis.appname]["providers"][analysis.provider][
@@ -45,10 +48,9 @@ if __name__ == "__main__":
                 ] = False
                 GLOBAL.Index.write()
 
-    if pushChanges:
-        GLOBAL.Index.write()
-        Github.push_index()
-        for file in os.listdir(GLOBAL.Paths.AppsDir):
-            os.remove(os.path.join(GLOBAL.Paths.AppsDir, file))
+    GLOBAL.Index.write()
+    Github.push_index()
+    for file in os.listdir(GLOBAL.Paths.Directories.Apps):
+        os.remove(os.path.join(GLOBAL.Paths.Directories.Apps, file))
     if display is not None:
         display.stop()

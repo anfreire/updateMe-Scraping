@@ -5,12 +5,12 @@ from dataclasses import dataclass, field, asdict
 
 @dataclass
 class IndexProvider:
-    source: str
-    version: str
-    packageName: str
-    download: str = ""
-    safe: bool = True
-    sha256: str = ""
+    source: str = field(default="")
+    version: str = field(default="")
+    packageName: str = field(default="")
+    download: str = field(default="")
+    safe: bool = field(default=True)
+    sha256: str = field(default="")
 
     def __getitem__(self, key: str) -> Any:
         return getattr(self, key)
@@ -20,24 +20,9 @@ class IndexProvider:
 
 
 @dataclass
-class IndexProviders:
-    providers: Dict[str, IndexProvider] = field(default_factory=dict)
-
-    def __getitem__(self, provider: str) -> IndexProvider:
-        return self.providers[provider]
-
-    def __setitem__(self, provider: str, value: IndexProvider) -> None:
-        self.providers[provider] = value
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Dict[str, Any]]) -> "IndexProviders":
-        return cls({k: IndexProvider(**v) for k, v in data.items()})
-
-
-@dataclass
 class IndexApp:
     icon: str
-    providers: IndexProviders
+    providers: dict[str, IndexProvider] = field(default_factory=dict)
     depends: list = field(default_factory=list)
     complements: list = field(default_factory=list)
     features: list = field(default_factory=list)
@@ -54,6 +39,10 @@ class Index:
         self.index_file = index_file
         self.index: Dict[str, IndexApp] = {}
         self.read()
+        with open(
+            "/home/anfreire/Documents/UpdateMe/Scrapping/index.json", "w"
+        ) as index_file:
+            json.dump(self.to_dict(), index_file, indent=4)
 
     def to_dict(self) -> dict:
         return {app: asdict(self.index[app]) for app in self.index}
@@ -64,10 +53,10 @@ class Index:
         self.index = {
             app_title: IndexApp(
                 icon=app_data["icon"],
-                providers=IndexProviders.from_dict(app_data["providers"]),
-                depends=app_data.get("depends", []),
-                complements=app_data.get("complements", []),
-                features=app_data.get("features", []),
+                providers=app_data["providers"],
+                depends=app_data["depends"],
+                complements=app_data["complements"],
+                features=app_data["features"],
             )
             for app_title, app_data in raw_index.items()
         }

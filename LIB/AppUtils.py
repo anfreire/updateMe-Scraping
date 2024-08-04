@@ -2,7 +2,7 @@ import re
 import string
 
 
-class App:
+class AppUtils:
     DIGITS_TRANSLATIONS = str.maketrans(
         {
             "0": "zero",
@@ -22,5 +22,5 @@ class App:
     def filter_name(name: str) -> str:
         name = re.sub(r"[^\w]", "", name)
         if name and name[0] in string.digits:
-            name = name.translate(App.DIGITS_TRANSLATIONS)
+            name = name.translate(AppUtils.DIGITS_TRANSLATIONS)
         return name.lower()
