@@ -302,8 +302,7 @@ class NewApp(CLI):
                     continue
                 with open(iconPath, "wb") as file:
                     file.write(response.content)
-            self.variables["icon"] = iconPath
-            Github.push_icon(iconPath)
+            self.variables["icon"] = Github.push_icon(iconPath)
             break
 
     def __get_providers(self) -> None:

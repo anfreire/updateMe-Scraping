@@ -64,10 +64,21 @@ class Selenium(WebDriver):
             and a.get_attribute("href").endswith(file_extension)
         ]
 
-    def monitor_downloads(self, fun: callable, timeout: int = 150) -> str:
+    def monitor_downloads(self, fun: callable, timeout: int = 200) -> str:
         downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
+        for filename in os.listdir(downloads_dir):
+            os.remove(os.path.join(downloads_dir, filename))
         downloaded_files = os.listdir(downloads_dir)
         fun()
+        tries = 0
+        while tries < 5:
+            downloaded_files = os.listdir(downloads_dir)
+            if len(downloaded_files) > 0:
+                break
+            time.sleep(1)
+            tries += 1
+        if tries == 5:
+            raise Exception(f"File did not download")
         tries = 0
         while tries < timeout:
             diff = [

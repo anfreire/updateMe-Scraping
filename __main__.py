@@ -69,3 +69,5 @@ if __name__ == "__main__":
     Github.push_index()
     if display is not None:
         display.stop()
+    Github.remove_unused_icons()
+    Github.remove_unused_assests()
