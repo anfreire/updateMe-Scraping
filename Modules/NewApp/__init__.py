@@ -235,20 +235,22 @@ class NewApp:
                         provider = radiolist_dialog(
                             title="Select Provider",
                             text="Select the provider to add",
-                            values={
-                                "MODYOLO": "MODYOLO",
-                                "LITEAPKS": "LITEAPKS",
-                                "APKDONE": "APKDONE",
-                            },
+                            values=[(x, x) for x in ["MODYOLO", "LITEAPKS", "APKDONE"]],
                         ).run()
                         if provider is None:
                             exit()
-                        suffix = prompt(f"Enter the tag for {provider}")
-                        if suffix is None:
-                            exit()
-                        origin = prompt(f"Enter the origin for {provider}")
-                        if origin is None:
-                            exit()
+                        if provider == "APKDONE":
+                            suffix = prompt(f"Enter the tag for {str(provider)}: ")
+                            if suffix is None:
+                                exit()
+                            origin = f"https://apkdone.com/{suffix}"
+                        else:
+                            origin = prompt(f"Enter the origin for {str(provider)}: ")
+                            if origin is None:
+                                exit()
+                            suffix = prompt(f"Enter the tag for {str(provider)}: ")
+                            if suffix is None:
+                                exit()
                         self.__variables["providers"].append(
                             LinkSuffixProvider(
                                 origin=origin,

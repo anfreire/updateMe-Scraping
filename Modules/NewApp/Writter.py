@@ -152,7 +152,7 @@ class Writter:
             f'{TAB * 2}"{self.app_name}",',
             TAB * 2 + "{",
             *[
-                f'{TAB * 3}"{provider.provider_name}": {provider.provider_name.replace(" ", "").lower()}'
+                f'{TAB * 3}"{provider.provider_name}": {provider.provider_name.replace(" ", "").lower()},'
                 for provider in self.providers
             ],
             TAB * 2 + "}",

@@ -1307,3 +1307,79 @@ def rar():
 
     app = AppBase("RAR", {"ReVanced": revanced})
     app.update()
+
+
+#####################################################################################
+# SECURE VPN
+def secure_vpn():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("secure-vpn-36039")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("secure-vpn-25243")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("secure-vpn-apk")()
+
+    app = AppBase(
+        "Secure VPN",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
+
+
+#####################################################################################
+# KINEMASTER
+def kinemaster():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("kinemaster-5707")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("kinemaster-145")()
+
+    app = AppBase(
+        "KineMaster",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+        },
+    )
+    app.update()
+
+
+#####################################################################################
+# XY VPN
+def xy_vpn():
+
+    # MODYOLO
+    def modyolo():
+        return Modyolo("xy-vpn-174735")()
+
+    # LITEAPKS
+    def liteapks():
+        return Liteapks("xy-vpn-79398")()
+
+    # APKDONE
+    def apkdone():
+        return ApkDone("xy-vpn")()
+
+    app = AppBase(
+        "XY VPN",
+        {
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
+    )
+    app.update()
