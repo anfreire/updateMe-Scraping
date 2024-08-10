@@ -1,409 +1,381 @@
-from LIB.CLI import CLI
-from GLOBAL import GLOBAL, IndexApp, IndexProvider
-
-# from Modules.NewApp.Searcher import Searcher
+from GLOBAL import GLOBAL, IndexApp, IndexProvider, LogLevel
+from Modules.NewApp.Writter import (
+    GithubProvider,
+    LinkSuffixProvider,
+    HrefFinderProvider,
+    DirectLinkProvider,
+    Writter,
+)
+from prompt_toolkit import prompt
+from prompt_toolkit.styles import Style
+from prompt_toolkit.completion import Completer, Completion
 from LIB.Github import Github
+from LIB.Thread import Thread
 import pickle
 import os
 import requests
 from typing import TypedDict, Literal, List, Tuple
 from copy import deepcopy
 import json
-import pyvirtualdisplay
+from prompt_toolkit.shortcuts import (
+    yes_no_dialog,
+    message_dialog,
+    radiolist_dialog,
+    checkboxlist_dialog,
+)
+from prompt_toolkit import prompt
 import re
 
-TAB = "    "
+
+class MyCompleter(Completer):
+    def __init__(self, words_list):
+        self.words_list = words_list
+
+    def get_completions(self, document, complete_event):
+        current_line = document.current_line_before_cursor.lower()
+        suggestions = [
+            word for word in self.words_list if word.lower().startswith(current_line)
+        ]
+        for suggestion in suggestions:
+            yield Completion(suggestion, start_position=0)
 
 
-def make_fun_name(name: str) -> str:
-    name = re.sub(r"[^a-zA-Z0-9_]", "", name)
-    if name[0].isdigit():
-        DIGITS = {
-            "0": "zero",
-            "1": "one",
-            "2": "two",
-            "3": "three",
-            "4": "four",
-            "5": "five",
-            "6": "six",
-            "7": "seven",
-            "8": "eight",
-            "9": "nine",
-        }
-        name = DIGITS[name[0]] + name[1:]
-    return name.lower()
-
-
-GITHUB_PROVIDER_TYPE = TypedDict(
-    "github",
-    {
-        "user": str,
-        "repo": str,
-        "include_words": list[str],
-        "exclude_words": list[str],
-    },
-)
-
-DEFINED_PROVIDER_TYPE = TypedDict(
-    "defined",
-    {
-        "provider": Literal["modyolo", "liteapks", "apkdone", "revanced"],
-        "tag": str,
-    },
-)
-
-CUSTOM_FIND_PROVIDER_TYPE = TypedDict(
-    "custom",
-    {
-        "link": str,
-        "include_words": list[str],
-        "exclude_words": list[str],
-    },
-)
-
-CUSTOM_DIRECT_PROVIDER_TYPE = TypedDict(
-    "custom_direct",
-    {
-        "link": str,
-    },
-)
-
-
-class NewApp(CLI):
+class NewApp:
     def __init__(self):
         super().__init__()
-        self.existing_apps = list(GLOBAL.Index.keys())
-        self.features = list(
-            {feature for app in GLOBAL.Index.values() for feature in app.features}
-        )
-        self._variables = {}
-        self.sources = {}
+        self.__threads: dict[str, Thread] = {}
+        self.__variables = {
+            "name": None,
+            "icon": None,
+            "dependencies": None,
+            "complements": None,
+            "features": None,
+            "providers": None,
+        }
+        self.__get_initial_data()
         self.__restore_config()
 
-    def __restore_config(self):
-        if not os.path.exists(GLOBAL.Paths.Files.NewAppBackup):
-            return
-        if not self.message(
-            "Do you want to restore the backup of a new app creation?", prompt=True
-        ):
-            return
+    def __get_initial_data(self):
+        def get_existing_apps():
+            return list(GLOBAL.Index.keys())
+
+        def get_features():
+            return list(
+                {feature for app in GLOBAL.Index.values() for feature in app.features}
+            )
+
+        def get_providers():
+            return list(
+                {
+                    provider
+                    for app in GLOBAL.Index.values()
+                    for provider in app.providers
+                }
+            )
+
+        self.__threads = {
+            "existing_apps": Thread(get_existing_apps),
+            "features": Thread(get_features),
+            "providers": Thread(get_providers),
+        }
+
+    def __read_config(self):
         with open(GLOBAL.Paths.Files.NewAppBackup, "rb") as file:
-            self._variables = pickle.load(file)
+            self.__variables = pickle.load(file)
 
     def __save_config(self):
         with open(GLOBAL.Paths.Files.NewAppBackup, "wb") as file:
-            pickle.dump(self.variables, file)
+            pickle.dump(self.__variables, file)
 
     def __remove_config(self):
         if os.path.exists(GLOBAL.Paths.Files.NewAppBackup):
             os.remove(GLOBAL.Paths.Files.NewAppBackup)
 
-    @property
-    def variables(self):
-        return self._variables
-
-    @variables.setter
-    def variables(self, value):
-        self._variables = value
-        self.__save_config()
-
-    def __build_provider_fun(self, provider: str, lines: List[str]) -> str:
-        return (
-            f'\n    # {provider}\n    def {provider.replace(" ", "").lower()}():\n        '
-            + "\n        ".join(lines)
-        )
-
-    def __build_github_scrapper(self) -> Tuple[str, str]:
-        user = self.input("Github User")
-        repo = self.input("Github Repo")
-        include_words: list[str] = self.input(
-            "Github Include Search Words", multiple=True
-        )
-        exclude_words = self.input("Github Exclude Search Words", multiple=True)
-        self.sources["Github"] = f"https://github.com/{user}/{repo}"
-        return (
-            user,
-            self.__build_provider_fun(
-                user,
-                [
-                    f'return Github("{user}", "{repo}")({repr(include_words)}, {repr(exclude_words)})',
-                ],
-            ),
-        )
-
-    def __build_defined_scrapper(self, provider: str) -> Tuple[str, str]:
-        tag = None
-        if provider == "ReVanced":
-            tag = self.input(f"{provider} Tag")
-        # else:
-        #     if not GLOBAL.Args.xhost:
-        #         display = pyvirtualdisplay.Display(visible=0, size=(800, 600))
-        #         display.start()
-        #     searcher = Searcher(provider)
-        #     searcher.search(self.variables["name"])
-        #     results = searcher.get_results()
-        #     for title, href in results.items():
-        #         name_words = [word.lower() for word in self.variables["name"].split()]
-        #         if all(word in title.lower() for word in name_words):
-        #             try:
-        #                 tag = searcher.get_tag(href)
-        #             except Exception as e:
-        #                 continue
-        #             self.sources[provider] = href
-        #             break
-        #     if not GLOBAL.Args.xhost:
-        #         display.stop()
-        if not tag:
-            tag = self.input(f"{provider} Tag")
-        match provider:
-            case "MODYOLO":
-                class_name = "Modyolo"
-            case "LITEAPKS":
-                class_name = "Liteapks"
-            case "APKDONE":
-                class_name = "ApkDone"
-            case "ReVanced":
-                class_name = "Revanced"
-        return (
-            provider,
-            self.__build_provider_fun(provider, [f'return {class_name}("{tag}")()']),
-        )
-
-    def __build_unkown_scrapper(self) -> Tuple[str, str]:
-        link = self.input("Unkown Link")
-        include_words = self.input(
-            "Unkown Provider Include Search Words", multiple=True
-        )
-        exclude_words = self.input("Unkown Provider Search Words", multiple=True)
-        return (
-            link,
-            self.__build_provider_fun(
-                link,
-                [
-                    "return Simple()(",
-                    f'    "{link}",',
-                    f"    include={repr(include_words)},",
-                    f"    exclude={repr(exclude_words)},",
-                    ")",
-                ],
-            ),
-        )
-
-    def __build_mobilism_scrapper(self) -> Tuple[str, str]:
-        search = self.input("Mobilism Search Query")
-        user = self.input("Mobilism Author")
-        include_words_search = self.input(
-            "Mobilism Include Search Words", multiple=True
-        )
-        exclude_words_search = self.input(
-            "Mobilism Exclude Search Words", multiple=True
-        )
-        include_words_filename = self.input(
-            "Mobilism Include Filename Words", multiple=True
-        )
-        exclude_words_filename = self.input(
-            "Mobilism Exclude Filename Words", multiple=True
-        )
-        return (
-            user,
-            self.__build_provider_fun(
-                user,
-                [
-                    f"return Mobilism()(",
-                    f'    "{self.variables["name"]}",',
-                    f'    "{search}",',
-                    f'    "{user}",',
-                    f"    include_words_search={repr(include_words_search)},",
-                    f"    exclude_words_search={repr(exclude_words_search)},",
-                    f"    include_words_filename={repr(include_words_filename)},",
-                    f"    exclude_words_filename={repr(exclude_words_filename)},",
-                    ")",
-                ],
-            ),
-        )
-
-    def __build_direct_scrapper(self) -> Tuple[str, str]:
-        name = self.input("Direct Provider Name")
-        link = self.input("Direct Provider URL")
-        return (
-            name,
-            self.__build_provider_fun(
-                name,
-                [
-                    f'return Simple()("{link}")',
-                ],
-            ),
-        )
-
-    def build_provider_scrappers(self) -> str:
-        PROVIDERS_MAP = {
-            "Github": lambda x: self.__build_github_scrapper(),
-            "MODYOLO": lambda x: self.__build_defined_scrapper(x),
-            "LITEAPKS": lambda x: self.__build_defined_scrapper(x),
-            "APKDONE": lambda x: self.__build_defined_scrapper(x),
-            "ReVanced": lambda x: self.__build_defined_scrapper(x),
-            "Direct Link": lambda x: self.__build_direct_scrapper(),
-            "HREF finder": lambda x: self.__build_unkown_scrapper(),
-            "Mobilism": lambda x: self.__build_mobilism_scrapper(),
-        }
-        providers_copy = deepcopy(self.variables["providers"])
-        scrappers = []
-        for provider in providers_copy.keys():
-            new_name, scrapper = PROVIDERS_MAP[provider](provider)
-            self.variables["providers"].pop(provider)
-            self.variables["providers"][new_name] = {}
-            scrappers.append(scrapper)
-        return "\n\n".join(scrappers)
+    def __restore_config(self):
+        if not os.path.exists(GLOBAL.Paths.Files.NewAppBackup):
+            return
+        if yes_no_dialog(
+            title="Restore previous session?",
+            text="Do you want to restore the previous session?",
+        ).run():
+            self.__read_config()
 
     def __get_name(self) -> None:
         value = ""
+        self.existing_apps = self.__threads["existing_apps"].result()
         while True:
-            value = self.input("App Name", value)
+            value = prompt("Enter the app name: ")
             if value is None:
                 exit()
             value = value.strip()
             if len(value) == 0:
-                self.message("Name cannot be empty", "error")
+                message_dialog(
+                    title="Invalid Name",
+                    text="The name cannot be empty",
+                    style=Style.from_dict({"bg": "#ff0000"}),
+                ).run()
                 continue
             if any(value == app for app in self.existing_apps):
-                self.message("App already exists", "error")
+                message_dialog(
+                    title="Invalid Name",
+                    text="The name already exists",
+                    style=Style.from_dict({"bg": "#ff0000"}),
+                ).run()
                 continue
-            self.variables["name"] = value
+            self.__variables["name"] = value
             break
 
     def __get_icon(self) -> None:
+        iconPath = os.path.join(
+            GLOBAL.Paths.Directories.Icons,
+            re.sub(r"[^a-zA-Z0-9_]", "", self.__variables["name"].lower()) + ".png",
+        )
         while True:
-            icon = self.input("App Icon URL")
+            if os.path.exists(iconPath):
+                if yes_no_dialog(
+                    title="Icon already exists",
+                    text="Do you want to use it?",
+                ).run():
+                    self.__variables["icon"] = iconPath
+                    break
+                else:
+                    if yes_no_dialog(
+                        title="Remove existing icon",
+                        text="Do you want to remove the existing icon?",
+                    ).run():
+                        os.remove(iconPath)
+                    else:
+                        continue
+            icon = prompt("Enter the app icon url: ")
             if icon is None:
                 exit()
             icon = icon.strip()
             if len(icon) == 0:
-                self.message("Icon cannot be empty", "error")
+                message_dialog(
+                    title="Invalid Icon",
+                    text="The icon cannot be empty",
+                    style=Style.from_dict({"bg": "#ff0000"}),
+                ).run()
                 continue
-            if os.path.exists(
-                iconPath := os.path.join(
-                    GLOBAL.Paths.Directories.Icons,
-                    re.sub(r"[^a-zA-Z0-9_]", "", self.variables["name"]) + ".png",
-                )
-            ):
-                if not self.message(
-                    "Icon already exists, do you want to use it?", prompt=True
-                ):
-                    if self.message(
-                        "Do you want to remove the existing icon?", prompt=True
-                    ):
-                        os.remove(iconPath)
-                    else:
-                        continue
-            else:
+            response = None
+            try:
                 response = requests.get(icon)
-                if response.status_code != 200:
-                    self.message("Invalid icon url", "error")
-                    continue
-                with open(iconPath, "wb") as file:
-                    file.write(response.content)
-            self.variables["icon"] = Github.push_icon(iconPath)
+            except Exception:
+                pass
+            if response is None or response.status_code != 200:
+                message_dialog(
+                    title="Invalid Icon",
+                    text="The icon url is invalid",
+                    style=Style.from_dict({"bg": "#ff0000"}),
+                ).run()
+                continue
+            with open(iconPath, "wb") as file:
+                file.write(response.content)
+            self.__variables["icon"] = Github.push_icon(iconPath)
             break
 
     def __get_providers(self) -> None:
-        providers = {
-            "Github": "0",
-            "MODYOLO": "0",
-            "LITEAPKS": "0",
-            "APKDONE": "0",
-            "ReVanced": "0",
-            "Direct Link": "0",
-            "HREF finder": "0",
-            "Mobilism": "0",
-        }
-        self.variables["providers"] = {}
+        self.features = self.__threads["features"].result()
+        providers_autocomplete = self.__threads["providers"].result()
+        self.__variables["providers"] = []
         while True:
-            providers = self.form("App Providers", providers)
-            if providers is None:
-                exit()
-            for provider, value in providers.items():
-                for _ in range((int(value) if value else 0)):
-                    self.variables["providers"][provider] = {}
-            if len(self.variables["providers"].keys()) == 0:
-                self.message("At least one provider is required", "error")
-                continue
-            break
+            if yes_no_dialog(
+                title="Add Provider",
+                text="Do you want to add a provider?",
+            ).run():
+                provider = radiolist_dialog(
+                    title="Select Provider",
+                    text="Select the provider to add",
+                    values=[
+                        (x, x)
+                        for x in ["Github", "LinkSuffix", "HrefFinder", "DirectLink"]
+                    ],
+                ).run()
+                if provider is None:
+                    exit()
+                match provider:
+                    case "Github":
+                        user = prompt(
+                            "Enter the Github user: ", completer=MyCompleter(providers_autocomplete)
+                        )
+                        if user is None:
+                            exit()
+                        repo = prompt("Enter the Github repo: ")
+                        if repo is None:
+                            exit()
+                        include_words = prompt(
+                            "Enter the include words (one per line)", multiline=True
+                        )
+                        if include_words is None:
+                            exit()
+                        include_words = include_words.split("\n")
+                        include_words = [
+                            word for word in include_words if len(word.strip())
+                        ]
+                        exclude_words = prompt(
+                            "Enter the exclude words (one per line)", multiline=True
+                        )
+                        if exclude_words is None:
+                            exit()
+                        exclude_words = exclude_words.split("\n")
+                        exclude_words = [
+                            word for word in exclude_words if len(word.strip())
+                        ]
+                        self.__variables["providers"].append(
+                            GithubProvider(
+                                origin=f"https://github.com/{user}/{repo}",
+                                provider_name="Github",
+                                user=user,
+                                repo=repo,
+                                include_words=include_words,
+                                exclude_words=exclude_words,
+                            )
+                        )
+                    case "LinkSuffix":
+                        provider = radiolist_dialog(
+                            title="Select Provider",
+                            text="Select the provider to add",
+                            values={
+                                "MODYOLO": "MODYOLO",
+                                "LITEAPKS": "LITEAPKS",
+                                "APKDONE": "APKDONE",
+                            },
+                        ).run()
+                        if provider is None:
+                            exit()
+                        suffix = prompt(f"Enter the tag for {provider}")
+                        if suffix is None:
+                            exit()
+                        origin = prompt(f"Enter the origin for {provider}")
+                        if origin is None:
+                            exit()
+                        self.__variables["providers"].append(
+                            LinkSuffixProvider(
+                                origin=origin,
+                                provider_name=provider,
+                                provider=provider,
+                                suffix=suffix,
+                            )
+                        )
+                    case "HrefFinder":
+                        provider_name = prompt(
+                            "Enter the provider name: ",
+                            completer=MyCompleter(providers_autocomplete),
+                        )
+                        if provider_name is None:
+                            exit()
+                        link = prompt("Enter the link: ")
+                        if link is None:
+                            exit()
+                        include_words = prompt(
+                            "Enter the include words (one per line)", multiline=True
+                        )
+                        if include_words is None:
+                            exit()
+                        include_words = include_words.split("\n")
+                        include_words = [
+                            word for word in include_words if len(word.strip())
+                        ]
+                        exclude_words = prompt(
+                            "Enter the exclude words (one per line)", multiline=True
+                        )
+                        if exclude_words is None:
+                            exit()
+                        exclude_words = exclude_words.split("\n")
+                        exclude_words = [
+                            word for word in exclude_words if len(word.strip())
+                        ]
+                        self.__variables["providers"].append(
+                            HrefFinderProvider(
+                                origin=link,
+                                provider_name=provider_name,
+                                link=link,
+                                include_words=include_words,
+                                exclude_words=exclude_words,
+                            )
+                        )
+                    case "DirectLink":
+                        provider_name = prompt(
+                            "Enter the provider name: ",
+                            completer=MyCompleter(providers_autocomplete),
+                        )
+                        if provider_name is None:
+                            exit()
+                        link = prompt("Enter the link: ")
+                        if link is None:
+                            exit()
+                        self.__variables["providers"].append(
+                            DirectLinkProvider(
+                                origin=link,
+                                provider_name=provider_name,
+                                link=link,
+                            )
+                        )
+            else:
+                break
 
     def __get_dependencies(self) -> None:
-        dependencies = self.checkbox("App Dependencies", self.existing_apps)
+        self.existing_apps = self.__threads["existing_apps"].result()
+        dependencies = checkboxlist_dialog(
+            title="App Dependencies",
+            text="Select the app dependencies",
+            values=[(app, app) for app in self.existing_apps],
+        ).run()
         if dependencies is None:
             exit()
-        self.variables["dependencies"] = dependencies
+        self.__variables["dependencies"] = dependencies
 
     def __get_complements(self) -> None:
-        complements = self.checkbox("App Complements", self.existing_apps)
+        self.existing_apps = self.__threads["existing_apps"].result()
+        complements = checkboxlist_dialog(
+            title="App Complements",
+            text="Select the app complements",
+            values=[(app, app) for app in self.existing_apps],
+        ).run()
         if complements is None:
             exit()
-        self.variables["complements"] = complements
+        self.__variables["complements"] = complements
 
     def __get_features(self) -> None:
-        features = self.input(
-            "Enter the app features:", autocomplete=self.features, multiple=True
+        self.features = self.__threads["features"].result()
+        features = prompt(
+            "Enter the features (one per line)\n",
+            completer=MyCompleter(self.features),
+            multiline=True,
         )
         if features is None:
             exit()
-        self.variables["features"] = features
+        features = features.split("\n")
+        features = [feature for feature in features if len(feature.strip())]
+        self.__variables["features"] = features
 
-    def write_scrapper(self):
-        os.system(
-            f'echo \'\n\n\n#####################################################################################\n# {self.variables["name"].upper()}\ndef {make_fun_name(self.variables["name"])}():\n'
-            + self.build_provider_scrappers()
-            + f'\n\n    app = AppBase("{self.variables["name"]}", '
-            + "{"
-            + ", ".join(
-                [
-                    f'"{providerName}": {providerName.replace(" ", "").lower()}'
-                    for providerName in self.variables["providers"].keys()
-                ]
-            )
-            + "})\n"
-            + f"    app.update()' >> {GLOBAL.Paths.Files.AppsScript}"
-        )
-
-    def add_index(self):
-        providers = deepcopy(self.variables["providers"])
-        for provider in providers.keys():
-            source = None if provider not in self.sources else self.sources[provider]
-            while source is None:
-                source = self.input(f"Enter the source of {provider}:")
-            self.variables["providers"][provider] = {
-                "source": source,
-                "version": "",
-                "packageName": "",
-                "download": "",
-                "safe": True,
-                "sha256": "",
-            }
-        GLOBAL.Index[self.variables["name"]] = IndexApp(
-            icon=self.variables["icon"],
-            depends=self.variables["dependencies"],
-            complements=self.variables["complements"],
-            features=self.variables["features"],
-            providers=self.variables["providers"],
-        )
-        GLOBAL.Index.write()
-
-    def add_category(self):
+    def select_category(self):
         categories = {}
         with open(GLOBAL.Paths.Files.Categories, "r") as file:
             categories = json.load(file)
-        category = self.select("App Category", list(categories.keys()))
+        category = radiolist_dialog(
+            title="Select Category",
+            text="Select the category to add the app",
+            values=[(category, category) for category in categories.keys()],
+        ).run()
         if category is None:
             while True:
-                category = self.input("App Category")
+                category = prompt("Enter the category: ")
                 if category in categories.keys():
-                    self.message("Category already exists", "error")
+                    message_dialog(
+                        title="Invalid Category",
+                        text="The category already exists",
+                        style=Style.from_dict({"bg": "#ff0000"}),
+                    ).run()
                     break
-                icon = self.input(f"{category} Icon")
-                categories[category] = {"apps": [self.variables["name"]], "icon": icon}
+                icon = prompt("Enter the category icon url: ")
+                categories[category] = {
+                    "apps": [self.__variables["name"]],
+                    "icon": icon,
+                }
                 break
         else:
-            categories[category]["apps"].append(self.variables["name"])
+            categories[category]["apps"].append(self.__variables["name"])
         with open(GLOBAL.Paths.Files.Categories, "w") as file:
             json.dump(categories, file, indent=4)
         Github.push_categories()
@@ -419,14 +391,22 @@ class NewApp(CLI):
         }
 
         for key, fun in ASSIGNMENTS.items():
-            while self.variables.get(key) is None:
+            while self.__variables.get(key) is None:
                 fun()
                 self.__save_config()
 
-        self.write_scrapper()
+        writter = Writter(
+            app_name=self.__variables["name"],
+            app_icon=self.__variables["icon"],
+            depends=self.__variables["dependencies"],
+            complements=self.__variables["complements"],
+            features=self.__variables["features"],
+            providers=self.__variables["providers"],
+        )
 
-        self.add_index()
+        self.select_category()
 
-        self.add_category()
+        writter.write_apps()
+        writter.write_index()
 
         self.__remove_config()

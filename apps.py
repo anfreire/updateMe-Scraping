@@ -1,12 +1,11 @@
 from LIB.AppBase import AppBase
 from LIB.Selenium import Selenium, By, WebDriverWait
-from Providers.Simple import Simple
+from Providers.HrefFinder import HrefFinder
 from Providers.Github import Github
 from Providers.Modyolo import Modyolo
 from Providers.Liteapks import Liteapks
 from Providers.Apkdone import ApkDone
-from Providers.Revanced import Revanced
-from Providers.Mobilism import Mobilism
+from Providers.DirectLink import DirectLink
 
 
 #####################################################################################
@@ -25,11 +24,15 @@ def hdo():
 def youtube():
     # ReVanced
     def revanced():
-        return Revanced("youtube-revanced")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-arm64-v8a-revanced.apk"
+        )
 
     # ReVanced Extended
     def revanced_extended():
-        return Revanced("revanced-youtube-extended")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-arm64-v8a-revanced-extended.apk"
+        )
 
     # ReVanced 2
     def revanced2():
@@ -60,11 +63,15 @@ def youtube():
 def youtube_music():
     # ReVanced
     def revanced():
-        return Revanced("revanced-youtube-music")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-music-arm64-v8a-revanced.apk"
+        )
 
     # ReVanced Extended
     def revanced_extended():
-        return Revanced("revanced-youtube-music-extended")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-music-arm64-v8a-revanced-extended.apk"
+        )
 
     # ReVanced 2
     def revanced2():
@@ -95,7 +102,9 @@ def youtube_music():
 def twitch():
     # ReVanced
     def revanced():
-        return Revanced("revanced-twitch")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/twitch-revanced.apk"
+        )
 
     # ReVanced (2)
     def revanced2():
@@ -111,12 +120,20 @@ def twitch():
 # REDDIT
 def reddit():
     # ReVanced Extended
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/reddit-revanced.apk"
+        )
+
+    # ReVanced Extended
     def revanced_extended():
-        return Revanced("revanced-reddit-extended")()
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/reddit-revanced-extended.apk"
+        )
 
     app = AppBase(
         "Reddit",
-        {"ReVanced": revanced_extended},
+        {"ReVanced": revanced, "ReVanced Extended": revanced_extended},
     )
     app.update()
 
@@ -125,11 +142,16 @@ def reddit():
 # TIKTOK
 def tiktok():
     def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/tiktok-revanced.apk"
+        )
+
+    def revanced2():
         return Github("j-hc", "revanced-magisk-module")(
             [".apk", "tiktok", "all"], ["arm-v7a"]
         )
 
-    app = AppBase("TikTok", {"ReVanced": revanced})
+    app = AppBase("TikTok", {"ReVanced": revanced, "ReVanced (2)": revanced2})
     app.update()
 
 
@@ -303,14 +325,14 @@ def instagram():
         return driver.download_file(link)
 
     def instander_unclone():
-        return Simple()(
+        return HrefFinder()(
             "https://thedise.me/instander/repo/",
             exclude=["clone"],
         )
 
     # HONINSTA
     def honinsta():
-        return Simple()(
+        return HrefFinder()(
             "https://honista.com/en/download.html",
             include=["64"],
             exclude=["32"],
@@ -923,6 +945,11 @@ def truecaller():
 # ADOBE LIGHTROOM
 def adobelightroom():
 
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/lightroom-revanced.apk"
+        )
+
     # MODYOLO
     def modyolo():
         return Modyolo("adobe-lightroom-6604")()
@@ -936,7 +963,13 @@ def adobelightroom():
         return ApkDone("adobe-lightroom")()
 
     app = AppBase(
-        "Lightroom", {"MODYOLO": modyolo, "LITEAPKS": liteapks, "APKDONE": apkdone}
+        "Lightroom",
+        {
+            "ReVanced": revanced,
+            "MODYOLO": modyolo,
+            "LITEAPKS": liteapks,
+            "APKDONE": apkdone,
+        },
     )
     app.update()
 
@@ -1156,38 +1189,6 @@ def waze():
 
 
 #####################################################################################
-# VPN.LAT
-def vpnlat():
-    def derrin():
-        return Mobilism()(
-            "VPN.lat", "VPN.lat", "derrin", exclude_words_filename=["armeabi"]
-        )
-
-    app = AppBase("VPN.lat", {"derrin": derrin})
-    app.update()
-
-
-#####################################################################################
-# MALLOC PRIVACY & SECURITY VPN
-def mallocprivacysecurityvpn():
-
-    # Balatan
-    def balatan():
-        return Mobilism()(
-            "Malloc Privacy & Security VPN",
-            "Malloc Privacy & Security VPN ",
-            "Balatan",
-            include_words_search=["premium"],
-            exclude_words_search=[],
-            include_words_filename=[],
-            exclude_words_filename=[],
-        )
-
-    app = AppBase("Malloc Privacy & Security VPN", {"Balatan": balatan})
-    app.update()
-
-
-#####################################################################################
 # ES File Explorer
 def esfilemanager():
 
@@ -1242,12 +1243,67 @@ def snapchat():
 
     # FouadMODS
     def foud():
-        return Simple()(
+        return HrefFinder()(
             "https://fmmods.com/fouad-snapchat/",
             include=["FouadMODS", "FMSC"],
             exclude=[],
         )
 
-
     app = AppBase("Snapchat", {"FouadMODS": foud})
+    app.update()
+
+
+#####################################################################################
+# FACEBOOK
+def facebook():
+
+    # ReVanced
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/facebook-arm64-v8a-revanced.apk"
+        )
+
+    app = AppBase("Facebook", {"ReVanced": revanced})
+    app.update()
+
+
+#####################################################################################
+# MESSENGER
+def messenger():
+
+    # ReVanced
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/messenger-arm64-v8a-revanced.apk"
+        )
+
+    app = AppBase("Messenger", {"ReVanced": revanced})
+    app.update()
+
+
+#####################################################################################
+# X
+def x():
+
+    # ReVanced
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/twitter-stable-piko.apk"
+        )
+
+    app = AppBase("X", {"ReVanced": revanced})
+    app.update()
+
+
+#####################################################################################
+# RAR
+def rar():
+
+    # ReVanced
+    def revanced():
+        return DirectLink()(
+            "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/rar-revanced.apk"
+        )
+
+    app = AppBase("RAR", {"ReVanced": revanced})
     app.update()

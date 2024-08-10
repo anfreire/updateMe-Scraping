@@ -129,7 +129,7 @@ class Github:
             return
         for file in diff:
             delete_result = subprocess.run(
-                f"cd {GLOBAL.Paths.Directories.Icons} && git rm {file}",
+                f"cd {GLOBAL.Paths.Directories.Icons} && git rm {file}; rm {file}",
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -138,7 +138,7 @@ class Github:
                 GLOBAL.Log(f"Error deleting {file} from release", level=LogLevel.ERROR)
             else:
                 GLOBAL.Log(f"Deleted {file} from release")
-        os.system(
-            f"cd {GLOBAL.Paths.Directories.Icons} && git commit -m 'Removed unused icons' && git push -f"
-        )
-        GLOBAL.Log(f"Pushed icons to Github")
+                os.system(
+                    f"cd {GLOBAL.Paths.Directories.Icons} && git commit -m 'Removed unused icons' && git push -f"
+                )
+                GLOBAL.Log(f"Removed unused icons from Github")

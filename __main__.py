@@ -41,6 +41,7 @@ if __name__ == "__main__":
 
     if GLOBAL.Args.new:
         NewApp()()
+        exit()
     else:
 
         clean()

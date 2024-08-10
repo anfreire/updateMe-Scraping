@@ -2,7 +2,7 @@ from LIB.Selenium import Selenium, By, WebDriverWait, EC
 from typing import List
 
 
-class Simple(Selenium):
+class HrefFinder(Selenium):
     def __init__(self):
         super().__init__()
 
