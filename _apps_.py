@@ -3,7 +3,7 @@ from Providers.HrefFinder import HrefFinder
 from Providers.Github import Github
 from Providers.Modyolo import Modyolo
 from Providers.Liteapks import Liteapks
-from Providers.Apkdone import ApkDone
+from Scrapping.Providers.ApkDone import ApkDone
 from Providers.DirectLink import DirectLink
 
 
