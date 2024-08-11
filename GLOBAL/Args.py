@@ -11,7 +11,8 @@ class Args:
     config: bool = False
     debug: bool = False
     xhost: bool = False
-    new: bool = False
+    new_app: bool = False
+    new_provider: bool = False
 
     @classmethod
     def parse_args(cls) -> "Args":
@@ -30,7 +31,12 @@ class Args:
         parser.add_argument(
             "-x", "--xhost", help="Use xhost: Display", action="store_true"
         )
-        parser.add_argument("-n", "--new", help="Add new app", action="store_true")
+        parser.add_argument(
+            "-na", "--new-app", help="Add new app", action="store_true"
+        )
+        parser.add_argument(
+            "-np", "--new-provider", help="Add new provider", action="store_true"
+        )
 
         args = parser.parse_args()
         return cls(**vars(args))

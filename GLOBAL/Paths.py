@@ -14,7 +14,9 @@ class Files:
     Log = Directories.Script / ".log"
     Config = Directories.Script / ".ini"
     AppsScript = Directories.Script / "apps.py"
+    AppsJson = Directories.Script / "apps.json"
     NewAppBackup = Directories.Script / "new_app.pkl"
+    NewProviderBackup = Directories.Script / "new_provider.pkl"
     Categories = Directories.Data / "categories.json"
 
 

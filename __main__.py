@@ -1,19 +1,42 @@
 from GLOBAL import GLOBAL
 from Modules.NewApp import NewApp
+from Modules.NewProvider import main as NewProvider
 from LIB.Github import Github
 from pyvirtualdisplay import Display
 import os
-import inspect
-import apps
+import json
+from LIB.AppBase import AppBase
+from Providers.HrefFinder import HrefFinder
+from Providers.Github import Github
+from Providers.Modyolo import Modyolo
+from Providers.Liteapks import Liteapks
+from Providers.Apkdone import ApkDone
+from Providers.DirectLink import DirectLink
+
+CLASS_MAP = {
+    "HrefFinder": HrefFinder,
+    "Github": Github,
+    "Modyolo": Modyolo,
+    "Liteapks": Liteapks,
+    "ApkDone": ApkDone,
+    "DirectLink": DirectLink,
+}
 
 
 def get_functions() -> dict[str, callable]:
-    return {
-        name: function
-        for name, function in [
-            o for o in inspect.getmembers(apps) if inspect.isfunction(o[1])
-        ]
-    }
+    with open(os.path.join(GLOBAL.Paths.Files.AppsJson), "r") as file:
+        return {
+            app: lambda: AppBase(
+                app,
+                {
+                    provider: lambda: CLASS_MAP[info["class"]](*info["init_args"])(
+                        *info["call_args"]
+                    )
+                    for provider, info in providers.items()
+                },
+            ).update()
+            for app, providers in json.load(file).items()
+        }
 
 
 def clean() -> None:
@@ -39,8 +62,8 @@ if __name__ == "__main__":
     display = None
     functions = get_functions()
 
-    if GLOBAL.Args.new:
-        NewApp()()
+    if GLOBAL.Args.new_app or GLOBAL.Args.new_provider:
+        NewApp()() if GLOBAL.Args.new_app else NewProvider()
         exit()
     else:
 
