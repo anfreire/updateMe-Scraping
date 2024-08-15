@@ -1,0 +1,1331 @@
+{
+    "HDO": {
+        "HDO": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://hdo.app/download"
+            ]
+        }
+    },
+    "YouTube": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-arm64-v8a-revanced.apk"
+            ]
+        },
+        "ReVanced Extended": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-arm64-v8a-revanced-extended.apk"
+            ]
+        },
+        "ReVanced (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "youtube"
+                ],
+                [
+                    "extended",
+                    "arm-v7a"
+                ]
+            ]
+        },
+        "ReVanced Extended (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "youtube-revanced-extended"
+                ],
+                [
+                    "arm-v7a"
+                ]
+            ]
+        }
+    },
+    "YouTube Music": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-music-arm64-v8a-revanced.apk"
+            ]
+        },
+        "ReVanced Extended": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/youtube-music-arm64-v8a-revanced-extended.apk"
+            ]
+        },
+        "ReVanced (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "music"
+                ],
+                [
+                    "extended",
+                    "arm-v7a"
+                ]
+            ]
+        },
+        "ReVanced Extended (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "music-revanced-extended"
+                ],
+                [
+                    "arm-v7a"
+                ]
+            ]
+        }
+    },
+    "Twitch": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/twitch-revanced.apk"
+            ]
+        },
+        "ReVanced (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "twitch",
+                    "all"
+                ],
+                [
+                    "arm-v7a"
+                ]
+            ]
+        }
+    },
+    "Reddit": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/reddit-revanced.apk"
+            ]
+        },
+        "ReVanced Extended": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/reddit-revanced-extended.apk"
+            ]
+        }
+    },
+    "TikTok": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/tiktok-revanced.apk"
+            ]
+        },
+        "ReVanced (2)": {
+            "class": "Github",
+            "init_args": [
+                "j-hc",
+                "revanced-magisk-module"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "tiktok",
+                    "all"
+                ],
+                [
+                    "arm-v7a"
+                ]
+            ]
+        }
+    },
+    "MicroG": {
+        "TeamVanced": {
+            "class": "Github",
+            "init_args": [
+                "ReVanced",
+                "GmsCore"
+            ],
+            "call_args": [
+                [
+                    "signed",
+                    ".apk"
+                ],
+                [
+                    "hw"
+                ]
+            ]
+        }
+    },
+    "Spotify": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "spotify-music-24463"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "spotify-music-98"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "spotify-mod"
+            ],
+            "call_args": []
+        }
+    },
+    "Photo Editor Pro": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "polish-photo-editor-pro-2578"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "polish-photo-editor-pro-491"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "photo-editor-pro-apk"
+            ],
+            "call_args": []
+        }
+    },
+    "Photoshop Express": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "photoshop-express-12281"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "photoshop-express-570"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "adobe-photoshop-express"
+            ],
+            "call_args": []
+        }
+    },
+    "CapCut": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "capcut-video-editor-29058"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "capcut-311"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "capcut-mod-apk"
+            ],
+            "call_args": []
+        }
+    },
+    "InShot": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "inshot-2257"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "inshot-pro-107"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "inshot"
+            ],
+            "call_args": []
+        }
+    },
+    "Instagram": {
+        "MyInsta - Clone": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://myinsta.app/",
+                [
+                    "_c_",
+                    "64"
+                ],
+                [
+                    "_uc_"
+                ]
+            ]
+        },
+        "MyInsta - Unclone": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://myinsta.app/",
+                [
+                    "_uc_",
+                    "64"
+                ],
+                [
+                    "_c_"
+                ]
+            ]
+        },
+        "Honinsta": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://honista.com/en/download.html",
+                [
+                    "64"
+                ],
+                [
+                    "32"
+                ]
+            ]
+        },
+        "Instander - Clone": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://thedise.me/instander/repo/",
+                [
+                    "clone"
+                ],
+                []
+            ]
+        },
+        "Instander - Unclone": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://thedise.me/instander/repo/",
+                [],
+                [
+                    "clone"
+                ]
+            ]
+        }
+    },
+    "NewPipe": {
+        "TeamNewPipe": {
+            "class": "Github",
+            "init_args": [
+                "TeamNewPipe",
+                "NewPipe"
+            ],
+            "call_args": [
+                [
+                    ".apk"
+                ]
+            ]
+        }
+    },
+    "Seal": {
+        "JunkFood02": {
+            "class": "Github",
+            "init_args": [
+                "JunkFood02",
+                "Seal"
+            ],
+            "call_args": [
+                [
+                    "universal",
+                    ".apk"
+                ]
+            ]
+        }
+    },
+    "Smart Launcher 6": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "smart-launcher-6-27413"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "smart-launcher-6-184"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "smart-launcher-5"
+            ],
+            "call_args": []
+        }
+    },
+    "Niagara Launcher": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "niagara-launcher-63941"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "niagara-launcher-75423"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "niagara-launcher"
+            ],
+            "call_args": []
+        }
+    },
+    "ReVanced Manager": {
+        "ReVanced": {
+            "class": "Github",
+            "init_args": [
+                "ReVanced",
+                "revanced-manager"
+            ],
+            "call_args": [
+                [
+                    ".apk"
+                ]
+            ]
+        }
+    },
+    "YTDLnis": {
+        "deniscerr": {
+            "class": "Github",
+            "init_args": [
+                "deniscerri",
+                "ytdlnis"
+            ],
+            "call_args": [
+                [
+                    ".apk",
+                    "universal"
+                ]
+            ]
+        }
+    },
+    "Never Have I Ever": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "never-have-i-ever-194362"
+            ],
+            "call_args": []
+        }
+    },
+    "Borealis": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "borealis-icon-pack-67728"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "borealis-icon-pack-23491"
+            ],
+            "call_args": []
+        }
+    },
+    "Layers": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "layers-icon-pack-54734"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "layers-glass-icon-pack-401063"
+            ],
+            "call_args": []
+        }
+    },
+    "Australis": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "australis-icon-pack-208797"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "australis-icon-pack-142596"
+            ],
+            "call_args": []
+        }
+    },
+    "Vera": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "vera-icon-pack-54724"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "vera-icon-pack-22930"
+            ],
+            "call_args": []
+        }
+    },
+    "Linebit": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "linebit-icon-pack-13472"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "linebit-22796"
+            ],
+            "call_args": []
+        }
+    },
+    "SoundCloud": {
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "soundcloud"
+            ],
+            "call_args": []
+        }
+    },
+    "IPTV Pro": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "iptv-pro-34294"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "iptv-pro-76245"
+            ],
+            "call_args": []
+        }
+    },
+    "Perfect IPTV Player": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "perfect-iptv-player-363415"
+            ],
+            "call_args": []
+        }
+    },
+    "Automate": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "automate-360715"
+            ],
+            "call_args": []
+        }
+    },
+    "Clickmate": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "auto-clicker-macro-clickmate-102404"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "auto-clicker-macro-clickmate-34853"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "clickmate"
+            ],
+            "call_args": []
+        }
+    },
+    "Tasker": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "tasker-369228"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "tasker"
+            ],
+            "call_args": []
+        }
+    },
+    "Xodo": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "xodo-pdf-reader-editor-5752"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "xodo-pdf-reader-editor-78598"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "xodo-pdf-reader-editor"
+            ],
+            "call_args": []
+        }
+    },
+    "Brilliant": {
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "brilliant"
+            ],
+            "call_args": []
+        }
+    },
+    "Musixmatch": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "musixmatch-17890"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "musixmatch-3761"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "musixmatch"
+            ],
+            "call_args": []
+        }
+    },
+    "OnStream": {
+        "OnStream": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://dl.getmenow.click/onstream-latest.apk"
+            ]
+        }
+    },
+    "Telegram": {
+        "NekoX": {
+            "class": "Github",
+            "init_args": [
+                "NekoX-Dev",
+                "NekoX"
+            ],
+            "call_args": [
+                [
+                    "arm64",
+                    ".apk"
+                ],
+                [
+                    "NoGcm"
+                ]
+            ]
+        },
+        "Forkgram": {
+            "class": "Github",
+            "init_args": [
+                "forkgram",
+                "TelegramAndroid"
+            ],
+            "call_args": [
+                [
+                    ".apk"
+                ]
+            ]
+        }
+    },
+    "Showly": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "showly-58960"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "showly-13824"
+            ],
+            "call_args": []
+        }
+    },
+    "CamScanner": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "camscanner-5320"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "camscanner-320"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "camscanner"
+            ],
+            "call_args": []
+        }
+    },
+    "App Cloner": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "app-cloner-154"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "app-cloner-mod-apk"
+            ],
+            "call_args": []
+        }
+    },
+    "AdGuard": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "adguard-28793"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "adguard-819"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "adguard-premium"
+            ],
+            "call_args": []
+        }
+    },
+    "Picsart": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "picsart-photo-editor-8131"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "picsart-136"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "picsart-app"
+            ],
+            "call_args": []
+        }
+    },
+    "Fitify": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "fitify-26376"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "fitify-8086"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "fitify"
+            ],
+            "call_args": []
+        }
+    },
+    "ENIX": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "enix-icon-pack-17851"
+            ],
+            "call_args": []
+        }
+    },
+    "WPS Office": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "wps-office-244438"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "wps-office-464"
+            ],
+            "call_args": []
+        }
+    },
+    "X-plore File Manager": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "x-plore-file-manager-48771"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "x-plore-file-manager-26189"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "x-plore-file-manager"
+            ],
+            "call_args": []
+        }
+    },
+    "Truecaller": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "truecaller-261629"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "truecaller-89"
+            ],
+            "call_args": []
+        }
+    },
+    "Lightroom": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/lightroom-revanced.apk"
+            ]
+        },
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "adobe-lightroom-6604"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "adobe-lightroom-205"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "adobe-lightroom"
+            ],
+            "call_args": []
+        }
+    },
+    "Shazam": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "shazam-2281"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "shazam-8507"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "shazam"
+            ],
+            "call_args": []
+        }
+    },
+    "Duolingo": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "duolingo-2137"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "duolingo-329"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "duolingo"
+            ],
+            "call_args": []
+        }
+    },
+    "MX Player": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "mx-player-244401"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "mx-player-651"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "mx-player"
+            ],
+            "call_args": []
+        }
+    },
+    "SNOW": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "snow-159306"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "snow-32696"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "snow"
+            ],
+            "call_args": []
+        }
+    },
+    "SD Maid Pro": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "sd-maid-pro-3800"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "sd-maid-pro-527"
+            ],
+            "call_args": []
+        }
+    },
+    "SD Maid SE": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "sd-maid-2-se-199767"
+            ],
+            "call_args": []
+        }
+    },
+    "1DM+": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "1dm-1309"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "1dm-3586"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "idm-music-video-torrent-downloader"
+            ],
+            "call_args": []
+        }
+    },
+    "My Diary": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "my-diary-16453"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "my-diary"
+            ],
+            "call_args": []
+        }
+    },
+    "nzb360": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "nzb360-55105"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "nzb360-73320"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "nzb360"
+            ],
+            "call_args": []
+        }
+    },
+    "Nova Launcher": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "nova-launcher-prime-371"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "nova-launcher-prime-79644"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "nova-launcher-prime-apk"
+            ],
+            "call_args": []
+        }
+    },
+    "Waze": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "waze-41662"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "waze-navigation-live-traffic-12025"
+            ],
+            "call_args": []
+        }
+    },
+    "ES File Explorer": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "es-file-explorer-19868"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "es-file-explorer-3661"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "es-file-explorer"
+            ],
+            "call_args": []
+        }
+    },
+    "Friendly For Twitter/X": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "friendly-for-twitter-67653"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "friendly-for-twitter-76209"
+            ],
+            "call_args": []
+        }
+    },
+    "Snapchat": {
+        "FouadMODS": {
+            "class": "HrefFinder",
+            "init_args": [],
+            "call_args": [
+                "https://fmmods.com/fouad-snapchat/",
+                [
+                    "FouadMODS",
+                    "FMSC"
+                ],
+                []
+            ]
+        }
+    },
+    "Facebook": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/facebook-arm64-v8a-revanced.apk"
+            ]
+        }
+    },
+    "Messenger": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/messenger-arm64-v8a-revanced.apk"
+            ]
+        }
+    },
+    "X": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/twitter-stable-piko.apk"
+            ]
+        }
+    },
+    "RAR": {
+        "ReVanced": {
+            "class": "DirectLink",
+            "init_args": [],
+            "call_args": [
+                "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/rar-revanced.apk"
+            ]
+        }
+    },
+    "Secure VPN": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "secure-vpn-36039"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "secure-vpn-25243"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "secure-vpn-apk"
+            ],
+            "call_args": []
+        }
+    },
+    "KineMaster": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "kinemaster-5707"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "kinemaster-145"
+            ],
+            "call_args": []
+        }
+    },
+    "XY VPN": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "xy-vpn-174735"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "xy-vpn-79398"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "xy-vpn"
+            ],
+            "call_args": []
+        }
+    }
+}

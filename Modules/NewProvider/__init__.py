@@ -2,16 +2,17 @@ from LIB.Selenium import WebElement, WebDriver, Selenium, WebDriverWait, EC, By
 from GLOBAL import GLOBAL
 from typing import Dict, Callable, List, Tuple, TypeAlias, Generator
 from LIB.CLI import CLI
-from pyvirtualdisplay import Display
 import pickle
 from Providers.PieMods import PieMods
 import os
 from dataclasses import dataclass
 
+
 @dataclass
 class Result:
     info: any
     source: str
+
 
 SearchFun: TypeAlias = Callable[[Selenium, str], Dict[str, Result]]
 DownloadFun: TypeAlias = Callable[[Selenium, Result], Callable[[], None]]
@@ -32,14 +33,9 @@ class NewProvider:
             self.__read_config()
         for app in self.iter_apps():
             try:
-                if not GLOBAL.Args.xhost:
-                    self.display = Display(visible=0, size=(800, 600))
-                    self.display.start()
                 self.driver = Selenium()
                 results: Dict[str, Result] = self.search(self.driver, app)
                 self.driver.quit()
-                if not GLOBAL.Args.xhost:
-                    self.display.stop()
             except Exception as e:
                 GLOBAL.Log(f"Error while searching {app}: {e}")
                 continue
@@ -134,12 +130,17 @@ def main():
             )
         )
         a_tags = wait.until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a[href^='https://piemods.com/']"))
+            EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "a[href^='https://piemods.com/']")
+            )
         )
-        build_info = lambda a: Result([tag for tag in a.get_attribute("href").split("/") if len(tag)][-1], a.get_attribute("href"))
+        build_info = lambda a: Result(
+            [tag for tag in a.get_attribute("href").split("/") if len(tag)][-1],
+            a.get_attribute("href"),
+        )
         return {a.text: build_info(a) for a in a_tags}
-    
+
     def download(driver: Selenium, result: Result) -> Callable[[], None]:
         return PieMods(result.info)()
-    
+
     NewProvider(provider, search, download)()

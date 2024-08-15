@@ -13,6 +13,8 @@ class Args:
     xhost: bool = False
     new_app: bool = False
     new_provider: bool = False
+    rm_icons: bool = False
+    rm_assets: bool = False
 
     @classmethod
     def parse_args(cls) -> "Args":
@@ -31,11 +33,15 @@ class Args:
         parser.add_argument(
             "-x", "--xhost", help="Use xhost: Display", action="store_true"
         )
-        parser.add_argument(
-            "-na", "--new-app", help="Add new app", action="store_true"
-        )
+        parser.add_argument("-na", "--new-app", help="Add new app", action="store_true")
         parser.add_argument(
             "-np", "--new-provider", help="Add new provider", action="store_true"
+        )
+        parser.add_argument(
+            "-ri", "--rm-icons", help="Remove unused icons", action="store_true"
+        )
+        parser.add_argument(
+            "-ra", "--rm-assets", help="Remove unused assets", action="store_true"
         )
 
         args = parser.parse_args()

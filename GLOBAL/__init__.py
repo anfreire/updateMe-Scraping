@@ -4,6 +4,7 @@ from GLOBAL.Log import Log, LogLevel
 from GLOBAL.Config import Config
 from GLOBAL.VirusTotal import VirusTotal, VirusTotalAnalysis
 from GLOBAL.Index import Index, IndexProvider, IndexApp
+from GLOBAL.Apps import Apps
 
 
 class Global:
@@ -14,6 +15,7 @@ class Global:
         self.Config = Config(self.Paths.Files.Config)
         self.VirusTotal = VirusTotal(self.Config["VirusTotal"]["API_KEY"], self.Log)
         self.Index = Index(self.Paths.Files.Index)
+        self.Apps = Apps(self.Paths.Files.AppsJson)
         self.Log("Global instance created")
         self.Log(f"Args: {self.Args.__dict__}")
 

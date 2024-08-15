@@ -1,9 +1,13 @@
-from dataclasses import dataclass
-import importlib
-from typing import Any, Literal, TypedDict, Dict
-from LIB.AppBase import AppBase
+from typing import Any, Dict, Type
 import json
-from GLOBAL import GLOBAL
+import importlib
+
+DynamicClass = Type[Any]
+
+
+def get_dynamic_class(module_path: str, class_name: str) -> DynamicClass:
+    module = importlib.import_module(module_path)
+    return getattr(module, class_name)
 
 
 class Provider:
@@ -17,13 +21,10 @@ class Provider:
         self.call_args = call_args
 
     def __call__(self) -> str | None:
-        class_var = self.__get_class_var()
-        return class_var(*self.init_args)(*self.call_args)
-
-    def __get_class_var(self):
-        module_name = "Providers." + self.class_name
-        module = importlib.import_module(module_name)
-        return getattr(module, self.class_name)
+        dynamic_class = get_dynamic_class(
+            f"Providers.{self.class_name}", self.class_name
+        )
+        return dynamic_class(*self.init_args)(*self.call_args)
 
 
 class App:
@@ -35,14 +36,15 @@ class App:
         self.providers = providers
 
     def __call__(self):
-        app = AppBase(self.name, self.providers)
+        dynamic_class = get_dynamic_class("LIB.AppBase", "AppBase")
+        app = dynamic_class(self.name, self.providers)
         app.update()
 
 
 class Apps:
-    def __init__(self) -> None:
+    def __init__(self, apps_json: str):
         self.apps: Dict[str, App] = {}
-        self.read(GLOBAL.Paths.Files.AppsJson)
+        self.__read(apps_json)
 
     def __getitem__(self, key: str) -> Any:
         return self.apps[key]
@@ -68,8 +70,8 @@ class Apps:
     def items(self):
         return self.apps.items()
 
-    def read(self, app_json: str) -> None:
-        with open(app_json, "r") as file:
+    def __read(self, apps_json: str) -> None:
+        with open(apps_json, "r") as file:
             apps = json.load(file)
         self.apps = {
             app: App(
