@@ -193,6 +193,30 @@
         }
     },
     "Spotify": {
+        "xManager": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "stock"
+            ]
+        },
+        "xManager (Amoled)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "stock"
+            ]
+        },
+        "xManager (Lite)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "lite"
+            ]
+        },
         "MODYOLO": {
             "class": "Modyolo",
             "init_args": [
@@ -211,6 +235,13 @@
             "class": "ApkDone",
             "init_args": [
                 "spotify-mod"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "spotify-music-156"
             ],
             "call_args": []
         }
@@ -236,6 +267,13 @@
                 "photo-editor-pro-apk"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "photo-editor-pro-polish-2908"
+            ],
+            "call_args": []
         }
     },
     "Photoshop Express": {
@@ -257,6 +295,13 @@
             "class": "ApkDone",
             "init_args": [
                 "adobe-photoshop-express"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "photoshop-express-photo-editor-220"
             ],
             "call_args": []
         }
@@ -282,6 +327,13 @@
                 "capcut-mod-apk"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "capcut-video-editor-2022"
+            ],
+            "call_args": []
         }
     },
     "InShot": {
@@ -303,6 +355,13 @@
             "class": "ApkDone",
             "init_args": [
                 "inshot"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "inshot-411"
             ],
             "call_args": []
         }
@@ -422,6 +481,13 @@
                 "smart-launcher-5"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "smart-launcher-6-7952"
+            ],
+            "call_args": []
         }
     },
     "Niagara Launcher": {
@@ -443,6 +509,13 @@
             "class": "ApkDone",
             "init_args": [
                 "niagara-launcher"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "niagara-launcher-3024"
             ],
             "call_args": []
         }
@@ -499,6 +572,13 @@
                 "borealis-icon-pack-23491"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "borealis-icon-pack-4712"
+            ],
+            "call_args": []
         }
     },
     "Layers": {
@@ -547,6 +627,13 @@
                 "vera-icon-pack-22930"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "vera-icon-pack-6767"
+            ],
+            "call_args": []
         }
     },
     "Linebit": {
@@ -586,6 +673,13 @@
             "class": "Liteapks",
             "init_args": [
                 "iptv-pro-76245"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "iptv-pro-495"
             ],
             "call_args": []
         }
@@ -700,6 +794,13 @@
                 "musixmatch"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "musixmatch-lyrics-finder-3301"
+            ],
+            "call_args": []
         }
     },
     "OnStream": {
@@ -755,6 +856,13 @@
                 "showly-13824"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "showly-4756"
+            ],
+            "call_args": []
         }
     },
     "CamScanner": {
@@ -776,6 +884,13 @@
             "class": "ApkDone",
             "init_args": [
                 "camscanner"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "camscanner-288"
             ],
             "call_args": []
         }
@@ -815,6 +930,13 @@
             "class": "ApkDone",
             "init_args": [
                 "adguard-premium"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "adguard-432"
             ],
             "call_args": []
         }
@@ -888,6 +1010,13 @@
                 "wps-office-464"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "wps-office-4063"
+            ],
+            "call_args": []
         }
     },
     "X-plore File Manager": {
@@ -909,6 +1038,13 @@
             "class": "ApkDone",
             "init_args": [
                 "x-plore-file-manager"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "x-plore-file-manager-8550"
             ],
             "call_args": []
         }
@@ -957,6 +1093,13 @@
                 "adobe-lightroom"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "adobe-lightroom-340"
+            ],
+            "call_args": []
         }
     },
     "Shazam": {
@@ -978,6 +1121,13 @@
             "class": "ApkDone",
             "init_args": [
                 "shazam"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "shazam-2795"
             ],
             "call_args": []
         }
@@ -1003,6 +1153,13 @@
                 "duolingo"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "duolingo-256"
+            ],
+            "call_args": []
         }
     },
     "MX Player": {
@@ -1026,6 +1183,13 @@
                 "mx-player"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "mx-player-pro-327"
+            ],
+            "call_args": []
         }
     },
     "SNOW": {
@@ -1047,6 +1211,13 @@
             "class": "ApkDone",
             "init_args": [
                 "snow"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "snow-2489"
             ],
             "call_args": []
         }
@@ -1097,6 +1268,13 @@
                 "idm-music-video-torrent-downloader"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "1dm-4049"
+            ],
+            "call_args": []
         }
     },
     "My Diary": {
@@ -1111,6 +1289,13 @@
             "class": "ApkDone",
             "init_args": [
                 "my-diary"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "my-diary-12795"
             ],
             "call_args": []
         }
@@ -1159,6 +1344,13 @@
                 "nova-launcher-prime-apk"
             ],
             "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "nova-launcher-prime-3069"
+            ],
+            "call_args": []
         }
     },
     "Waze": {
@@ -1173,6 +1365,13 @@
             "class": "Liteapks",
             "init_args": [
                 "waze-navigation-live-traffic-12025"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "waze-2042"
             ],
             "call_args": []
         }
@@ -1196,6 +1395,13 @@
             "class": "ApkDone",
             "init_args": [
                 "es-file-explorer"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "es-file-explorer-4056"
             ],
             "call_args": []
         }
@@ -1264,6 +1470,13 @@
             "call_args": [
                 "https://github.com/FiorenMas/Revanced-And-Revanced-Extended-Non-Root/releases/download/all/rar-revanced.apk"
             ]
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "rar-11146"
+            ],
+            "call_args": []
         }
     },
     "Secure VPN": {
@@ -1285,6 +1498,13 @@
             "class": "ApkDone",
             "init_args": [
                 "secure-vpn-apk"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "secure-vpn-418"
             ],
             "call_args": []
         }
@@ -1324,6 +1544,73 @@
             "class": "ApkDone",
             "init_args": [
                 "xy-vpn"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "xy-vpn-516"
+            ],
+            "call_args": []
+        }
+    },
+    "TickTick": {
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "ticktick-9327"
+            ],
+            "call_args": []
+        },
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "ticktick-25840"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "ticktick"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "ticktick-6114"
+            ],
+            "call_args": []
+        }
+    },
+    "Photomath": {
+        "MODYOLO": {
+            "class": "Modyolo",
+            "init_args": [
+                "photomath-248198"
+            ],
+            "call_args": []
+        },
+        "LITEAPKS": {
+            "class": "Liteapks",
+            "init_args": [
+                "photomath-2761"
+            ],
+            "call_args": []
+        },
+        "APKDONE": {
+            "class": "ApkDone",
+            "init_args": [
+                "photomath"
+            ],
+            "call_args": []
+        },
+        "MODZOCO": {
+            "class": "ModZoco",
+            "init_args": [
+                "photomath-3140"
             ],
             "call_args": []
         }

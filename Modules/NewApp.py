@@ -1,11 +1,12 @@
 from GLOBAL import GLOBAL, IndexApp, IndexProvider, LogLevel
-from Modules.NewApp.Writter import (
+from Modules.Writter import (
     GithubProvider,
     LinkSuffixProvider,
     HrefFinderProvider,
     DirectLinkProvider,
     Writter,
 )
+from Modules.Searcher import Searcher
 from LIB.CLI import CLI, StyleType
 from LIB.Github import Github
 from LIB.Thread import Thread
@@ -112,7 +113,7 @@ class NewApp:
                     title="Icon already exists",
                     message="Do you want to use it?",
                 ):
-                    self.__variables["icon"] = iconPath
+                    self.__variables["icon"] = Github.push_icon(iconPath)
                     break
                 else:
                     if CLI.confirm(
@@ -197,18 +198,35 @@ class NewApp:
                         provider = CLI.select(
                             title="Select Provider",
                             message="Select the provider to add",
-                            options=["MODYOLO", "LITEAPKS", "APKDONE"],
+                            options=["MODYOLO", "LITEAPKS", "APKDONE", "MODZOCO"],
                         )
-                        if provider == "APKDONE":
-                            suffix = CLI.input(f"Enter the tag for {str(provider)}: ")
-                            if suffix is None:
-                                exit()
-                            origin = f"https://apkdone.com/{suffix}"
-                        else:
-                            origin = CLI.input(
-                                f"Enter the origin for {str(provider)}: "
-                            )
-                            suffix = CLI.input(f"Enter the tag for {str(provider)}: ")
+                        tries = 0
+                        while tries < 3:
+                            try:
+                                searcher = Searcher(provider)
+                                searcher.search(self.__variables["name"])
+                                results = searcher.get_results()
+                                origin, suffix = searcher.get_origin_and_tag(results[self.__variables["name"]])
+                            except Exception as e:
+                                print(e)
+                                suffix = None
+                                if tries < 2:
+                                    Searcher.solve_captcha(provider)
+                                pass
+                            if suffix is not None:
+                                break
+                            tries += 1
+                        if not suffix:
+                            if provider == "APKDONE":
+                                suffix = CLI.input(f"Enter the tag for {str(provider)}: ")
+                                if suffix is None:
+                                    exit()
+                                origin = f"https://apkdone.com/{suffix}"
+                            else:
+                                origin = CLI.input(
+                                    f"Enter the origin for {str(provider)}: "
+                                )
+                                suffix = CLI.input(f"Enter the tag for {str(provider)}: ")
                         self.__variables["providers"].append(
                             LinkSuffixProvider(
                                 origin=origin,
@@ -284,8 +302,6 @@ class NewApp:
         )
         if features is None:
             exit()
-        features = features.split("\n")
-        features = [feature for feature in features if len(feature.strip())]
         self.__variables["features"] = features
 
     def select_category(self):
@@ -317,7 +333,6 @@ class NewApp:
             categories[category]["apps"].append(self.__variables["name"])
         with open(GLOBAL.Paths.Files.Categories, "w") as file:
             json.dump(categories, file, indent=4)
-        Github.push_categories()
 
     def __call__(self):
         ASSIGNMENTS = {
@@ -348,5 +363,4 @@ class NewApp:
         writter.write_apps()
         writter.write_index()
 
-        self.__remove_config()
 

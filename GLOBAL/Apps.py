@@ -1,13 +1,12 @@
-from typing import Any, Dict, Type
+from typing import Any, Dict, Type, Protocol
 import json
 import importlib
 
-DynamicClass = Type[Any]
 
+class DynamicProviderClass(Protocol):
+    def __init__(self, *args: Any): ...
 
-def get_dynamic_class(module_path: str, class_name: str) -> DynamicClass:
-    module = importlib.import_module(module_path)
-    return getattr(module, class_name)
+    def __call__(self, *args: Any) -> str | None: ...
 
 
 class Provider:
@@ -20,10 +19,12 @@ class Provider:
         self.init_args = init_args
         self.call_args = call_args
 
+    def __get_dynamic_class(self) -> Type[DynamicProviderClass]:
+        module = importlib.import_module(f"Providers.{self.class_name}")
+        return getattr(module, self.class_name)
+
     def __call__(self) -> str | None:
-        dynamic_class = get_dynamic_class(
-            f"Providers.{self.class_name}", self.class_name
-        )
+        dynamic_class = self.__get_dynamic_class()
         return dynamic_class(*self.init_args)(*self.call_args)
 
 
@@ -35,18 +36,20 @@ class App:
         self.name = name
         self.providers = providers
 
-    def __call__(self):
-        dynamic_class = get_dynamic_class("LIB.AppBase", "AppBase")
-        app = dynamic_class(self.name, self.providers)
-        app.update()
+    def __call__(self, provider: str = None) -> None:
+        from LIB.AppBase import AppBase
+
+        app = AppBase(self.name, self.providers)
+        app.update(provider)
 
 
 class Apps:
     def __init__(self, apps_json: str):
         self.apps: Dict[str, App] = {}
+        self.apps_json = apps_json
         self.__read(apps_json)
 
-    def __getitem__(self, key: str) -> Any:
+    def __getitem__(self, key: str) -> App:
         return self.apps[key]
 
     def __setitem__(self, key: str, value: Any) -> None:
@@ -87,3 +90,21 @@ class Apps:
             )
             for app, providers in apps.items()
         }
+
+    def write(self) -> None:
+        with open(self.apps_json, "w") as file:
+            json.dump(
+                {
+                    app: {
+                        provider: {
+                            "class": provider_info.class_name,
+                            "init_args": provider_info.init_args,
+                            "call_args": provider_info.call_args,
+                        }
+                        for provider, provider_info in app_info.providers.items()
+                    }
+                    for app, app_info in self.apps.items()
+                },
+                file,
+                indent=4,
+            )

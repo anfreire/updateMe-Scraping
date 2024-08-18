@@ -13,6 +13,7 @@ class Args:
     xhost: bool = False
     new_app: bool = False
     new_provider: bool = False
+    provider: Optional[str] = None
     rm_icons: bool = False
     rm_assets: bool = False
 
@@ -32,6 +33,9 @@ class Args:
         parser.add_argument("-d", "--debug", help="Debug mode", action="store_true")
         parser.add_argument(
             "-x", "--xhost", help="Use xhost: Display", action="store_true"
+        )
+        parser.add_argument(
+            "-p", "--provider", help="Provider name", type=str
         )
         parser.add_argument("-na", "--new-app", help="Add new app", action="store_true")
         parser.add_argument(

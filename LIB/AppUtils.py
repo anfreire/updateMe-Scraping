@@ -44,7 +44,6 @@ class AppUtils:
 
     @staticmethod
     def move_file(path: str, new_file_name: str) -> str:
-        print(path, new_file_name)
         new_path = os.path.join(GLOBAL.Paths.Directories.Apps, new_file_name)
         if os.path.exists(new_path) and path != new_path:
             os.remove(new_path)

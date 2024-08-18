@@ -2,13 +2,14 @@ from LIB.Selenium import Selenium, By, WebDriverWait, EC
 from typing import Literal
 
 
-PROVIDERS_KEYS = Literal["MODYOLO", "LITEAPKS", "APKDONE"]
+PROVIDERS_KEYS = Literal["MODYOLO", "LITEAPKS", "APKDONE", "MODZOCO"]
 
 
 URLS = {
     "MODYOLO": lambda x: f"https://modyolo.com/?s={x}",
     "LITEAPKS": lambda x: f"https://liteapks.com/?s={x}",
     "APKDONE": lambda x: f"https://apkdone.com/search/{x}",
+    "MODZOCO": lambda x: f"https://modzoco.com/?s={x}",
 }
 
 
@@ -28,6 +29,11 @@ TITLE_AND_HREF_SELECTORS = {
         "href": lambda x: x.get_attribute("href"),
         "title": lambda x: x.get_attribute("title"),
     },
+    "MODZOCO": {
+        "parent": "a.archive-post[title][href]",
+        "href": lambda x: x.get_attribute("href"),
+        "title": lambda x: x.get_attribute("title"),
+    },
 }
 
 
@@ -39,19 +45,22 @@ class Searcher(Selenium):
     def search(self, search: str):
         self.get(URLS[self.provider](search.replace(" ", "+")))
 
-    def get_results(self):
+    def get_results(self) -> dict[str, str]:
+        wait = WebDriverWait(self, 10)
         return {
             TITLE_AND_HREF_SELECTORS[self.provider]["title"](
                 parent
             ): TITLE_AND_HREF_SELECTORS[self.provider]["href"](parent)
-            for parent in self.find_elements(
-                By.CSS_SELECTOR, TITLE_AND_HREF_SELECTORS[self.provider]["parent"]
+            for parent in wait.until(
+                EC.presence_of_all_elements_located(
+                    (By.CSS_SELECTOR, TITLE_AND_HREF_SELECTORS[self.provider]["parent"])
+                )
             )
         }
 
-    def get_tag(self, href: str) -> str:
+    def get_origin_and_tag(self, href: str) -> tuple[str, str]:
         if self.provider == "APKDONE":
-            return href.split("/")[3]
+            return href, href.split("/")[3]
         self.get(href)
         wait = WebDriverWait(self, 10)
         a = wait.until(
@@ -61,4 +70,14 @@ class Searcher(Selenium):
         )
         for i in a:
             if "download" in i.get_attribute("href"):
-                return i.get_attribute("href").split("/")[-1]
+                return href, i.get_attribute("href").split("/")[-1]
+
+    @staticmethod
+    def solve_captcha(provider: PROVIDERS_KEYS):
+        import os
+        import random
+
+        os.system("killall chromium > /dev/null 2>&1")
+        os.system(
+            f"python3 /home/anfreire/Documents/UpdateMe/Scrapping/Modules/Captcha.py '{URLS[provider](str(random.random()))}'"
+        )

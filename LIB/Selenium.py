@@ -21,7 +21,7 @@ class Selenium(WebDriver):
         )
 
     def clean_old_session(self) -> None:
-        os.system("pkill -f chromium")
+        os.system("killall chromium > /dev/null 2>&1")
         os.system("rm -rf /home/anfreire/.config/chromium/Singleton*")
 
     def get_extension_folder(self) -> str:
@@ -52,6 +52,10 @@ class Selenium(WebDriver):
             },
         )
         return options
+    
+    def get(self, url: str) -> None:
+        super().get(url)
+        self.execute_script("window.alert = function() {};")
 
     def click_js(self, element: WebElement) -> None:
         self.execute_script("arguments[0].click();", element)

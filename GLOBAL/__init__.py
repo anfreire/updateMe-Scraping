@@ -4,7 +4,7 @@ from GLOBAL.Log import Log, LogLevel
 from GLOBAL.Config import Config
 from GLOBAL.VirusTotal import VirusTotal, VirusTotalAnalysis
 from GLOBAL.Index import Index, IndexProvider, IndexApp
-from GLOBAL.Apps import Apps
+from GLOBAL.Apps import Apps, Provider, App
 
 
 class Global:
