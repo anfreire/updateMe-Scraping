@@ -198,7 +198,7 @@
             "init_args": [
             ],
             "call_args": [
-                "stock"
+                "Stock_Patched"
             ]
         },
         "xManager (Amoled)": {
@@ -206,7 +206,7 @@
             "init_args": [
             ],
             "call_args": [
-                "stock"
+                "Amoled_Patched"
             ]
         },
         "xManager (Lite)": {
@@ -214,7 +214,55 @@
             "init_args": [
             ],
             "call_args": [
-                "lite"
+                "Lite_Patched"
+            ]
+        },
+        "xManager (Cloned)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Stock_Cloned_Patched"
+            ]
+        },
+        "xManager (Amoled Cloned)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Amoled_Cloned_Patched"
+            ]
+        },
+        "xManager (Experimental)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Stock_Experimental_Patched"
+            ]
+        },
+        "xManager (Amoled Experimental)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Amoled_Experimental_Patched"
+            ]
+        },
+        "xManager (Experimental Cloned)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Stock_Experimental_Cloned_Patched"
+            ]
+        },
+        "xManager (Amoled Experimental Cloned)": {
+            "class": "xManager",
+            "init_args": [
+            ],
+            "call_args": [
+                "Amoled_Experimental_Cloned_Patched"
             ]
         },
         "MODYOLO": {

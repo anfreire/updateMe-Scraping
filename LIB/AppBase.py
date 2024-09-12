@@ -161,20 +161,21 @@ class AppBase:
         self.__process(provider_title, apk, new_path)
         return True
 
-    def update(self, provider_title: str = None) -> None:
-        if provider_title:
-            if provider_title not in self.providers:
-                GLOBAL.Log(
-                    f"{self.app_title} from {provider_title}: Aborted due to invalid provider",
-                    level="DEBUG",
-                )
-                return
-            AppUtils.clean_directory(os.path.join(os.path.expanduser("~"), "Downloads"))
-            self.__update_provider(provider_title, self.providers[provider_title])
-            return
-        for provider_title, fun in self.providers.items():
-            AppUtils.clean_directory(os.path.join(os.path.expanduser("~"), "Downloads"))
-            ret = self.__update_provider(provider_title, fun)
-            if ret == False:
-                self.__update_provider(provider_title, fun)
+    def update(self, providers: list[str] = None) -> None:
+        if providers and len(providers):
+            for provider_title in providers:
+                if provider_title not in self.providers:
+                    GLOBAL.Log(
+                        f"{self.app_title} from {provider_title}: Aborted due to invalid provider",
+                        level="DEBUG",
+                    )
+                    continue
+                AppUtils.clean_directory(os.path.join(os.path.expanduser("~"), "Downloads"))
+                self.__update_provider(provider_title, self.providers[provider_title])
+        else:
+            for provider_title, fun in self.providers.items():
+                AppUtils.clean_directory(os.path.join(os.path.expanduser("~"), "Downloads"))
+                ret = self.__update_provider(provider_title, fun)
+                if ret == False:
+                    self.__update_provider(provider_title, fun)
         GLOBAL.Index.write()

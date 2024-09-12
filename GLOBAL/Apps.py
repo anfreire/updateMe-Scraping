@@ -36,11 +36,11 @@ class App:
         self.name = name
         self.providers = providers
 
-    def __call__(self, provider: str = None) -> None:
+    def __call__(self, providers: list[str] = None) -> None:
         from LIB.AppBase import AppBase
 
         app = AppBase(self.name, self.providers)
-        app.update(provider)
+        app.update(providers)
 
 
 class Apps:
